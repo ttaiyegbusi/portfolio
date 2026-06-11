@@ -71,7 +71,7 @@ export default function FigmaApp({ controls, dragHandleProps }: AppContentProps)
       {/* ------ Body ------ */}
       <div className={`relative flex-1 overflow-hidden ${isDarkMode ? "bg-[#0f0f0f]" : "bg-windowBody"}`}>
         <FigmaCanvas focusPoint={FRAME_CENTERS[activePage] ?? null} focusKey={focusKey}>
-          <CanvasContent isDarkMode={isDarkMode} />
+          <CanvasContent />
         </FigmaCanvas>
 
         {/* Floating sidebars */}

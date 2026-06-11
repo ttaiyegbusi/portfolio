@@ -115,28 +115,24 @@ function MiniBars({ tones }: { tones: string[] }) {
   );
 }
 
-interface CanvasContentProps {
-  isDarkMode?: boolean;
-}
-
-export default function CanvasContent({ isDarkMode = false }: CanvasContentProps) {
+export default function CanvasContent() {
   const lagosTime = useLagosTime();
 
   return (
     <>
-      {/* Decorative frames — muted in dark mode */}
+      {/* Decorative frames */}
       <CanvasFrame label="Knit — Wireframes" style={{ left: 420, top: 410, width: 400, height: 264 }}>
         <div className="flex h-full">
-          <div className={`w-[88px] border-r p-2.5 ${isDarkMode ? "border-[#2a2a2a] bg-[#1a1a1a]" : "border-borderFaint bg-[#FAFAFA]"}`}>
+          <div className="w-[88px] border-r border-borderFaint bg-[#FAFAFA] p-2.5">
             {[44, 60, 36, 52, 40].map((w, i) => (
-              <div key={i} className={`mb-2 h-1.5 rounded-full ${isDarkMode ? "bg-white/[0.12]" : "bg-black/[0.07]"}`} style={{ width: w }} />
+              <div key={i} className="mb-2 h-1.5 rounded-full bg-black/[0.07]" style={{ width: w }} />
             ))}
           </div>
           <div className="flex-1 p-3">
-            <div className={`mb-2.5 h-2 w-24 rounded-full ${isDarkMode ? "bg-white/[0.15]" : "bg-black/[0.1]"}`} />
+            <div className="mb-2.5 h-2 w-24 rounded-full bg-black/[0.1]" />
             <div className="grid grid-cols-3 gap-2">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className={`aspect-[4/3] rounded-[4px] border ${isDarkMode ? "border-white/[0.1] bg-[#0f0f0f]" : "border-black/[0.06] bg-[#F4F4F4]"}`} />
+                <div key={i} className="aspect-[4/3] rounded-[4px] border border-black/[0.06] bg-[#F4F4F4]" />
               ))}
             </div>
           </div>
@@ -144,7 +140,7 @@ export default function CanvasContent({ isDarkMode = false }: CanvasContentProps
       </CanvasFrame>
 
       <CanvasFrame label="icametoo — Mobile App" style={{ left: 2150, top: 380, width: 180, height: 360 }}>
-        <div className={`flex h-full flex-col p-3 ${isDarkMode ? "bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a]" : "bg-gradient-to-b from-[#0A0D14] to-[#2A2F3A]"}`}>
+        <div className="flex h-full flex-col bg-gradient-to-b from-[#0A0D14] to-[#2A2F3A] p-3">
           <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/25" />
           <div className="mb-2 h-2 w-20 rounded-full bg-white/60" />
           <div className="mb-4 h-1.5 w-14 rounded-full bg-white/25" />
@@ -159,46 +155,39 @@ export default function CanvasContent({ isDarkMode = false }: CanvasContentProps
       </CanvasFrame>
 
       <CanvasFrame label="Football booth — Match Hub" style={{ left: 430, top: 1330, width: 460, height: 260 }}>
-        <div className={`flex h-full flex-col p-4 ${isDarkMode ? "bg-[#0a1a0f]" : "bg-[#0E2A14]"}`}>
+        <div className="flex h-full flex-col bg-[#0E2A14] p-4">
           <div className="mb-3 flex items-center justify-between">
-            <div className={`h-2 w-16 rounded-full ${isDarkMode ? "bg-white/40" : "bg-white/55"}`} />
+            <div className="h-2 w-16 rounded-full bg-white/55" />
             <div className="rounded-full bg-[#5EC550] px-2 py-0.5 text-[8px] font-semibold text-white">LIVE 74'</div>
           </div>
           <div className="flex flex-1 items-center justify-center gap-6 text-white">
-            <div className={`h-9 w-9 rounded-full ${isDarkMode ? "bg-white/10" : "bg-white/15"}`} />
+            <div className="h-9 w-9 rounded-full bg-white/15" />
             <span className="text-[22px] font-semibold tracking-tight">2 — 1</span>
-            <div className={`h-9 w-9 rounded-full ${isDarkMode ? "bg-white/10" : "bg-white/15"}`} />
+            <div className="h-9 w-9 rounded-full bg-white/15" />
           </div>
           <div className="grid grid-cols-4 gap-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className={`h-6 rounded-md ${isDarkMode ? "bg-white/[0.08]" : "bg-white/10"}`} />
+              <div key={i} className="h-6 rounded-md bg-white/10" />
             ))}
           </div>
         </div>
       </CanvasFrame>
 
       <CanvasFrame label="Chain Core — Dashboard" style={{ left: 1990, top: 1280, width: 460, height: 280 }}>
-        <div className={`flex h-full flex-col ${isDarkMode ? "border-t border-[#2a2a2a] bg-[#1a1a1a]" : ""}`}>
-          <div className={`flex items-center gap-2 border-b px-3 py-2 ${isDarkMode ? "border-[#2a2a2a]" : "border-borderFaint"}`}>
+        <div className="flex h-full flex-col">
+          <div className="flex items-center gap-2 border-b border-borderFaint px-3 py-2">
             <div className="h-2 w-2 rounded-full bg-[#3099DE]" />
-            <div className={`h-1.5 w-20 rounded-full ${isDarkMode ? "bg-white/[0.15]" : "bg-black/[0.12]"}`} />
-            <div className={`ml-auto h-1.5 w-10 rounded-full ${isDarkMode ? "bg-white/[0.1]" : "bg-black/[0.07]"}`} />
+            <div className="h-1.5 w-20 rounded-full bg-black/[0.12]" />
+            <div className="ml-auto h-1.5 w-10 rounded-full bg-black/[0.07]" />
           </div>
           <MiniBars tones={["#B6DFEB", "#3099DE", "#DCF0FB"]} />
         </div>
       </CanvasFrame>
 
       <CanvasFrame label="Keyboard — Exploration" style={{ left: 1240, top: 250, width: 330, height: 180 }}>
-        <div className={`grid h-full grid-cols-6 gap-1.5 p-3 ${isDarkMode ? "bg-[#222]" : "bg-[#ECEEF1]"}`}>
+        <div className="grid h-full grid-cols-6 gap-1.5 bg-[#ECEEF1] p-3">
           {Array.from({ length: 18 }).map((_, i) => (
-            <div
-              key={i}
-              className={`rounded-[5px] border ${
-                isDarkMode
-                  ? "border-white/[0.1] bg-[#1a1a1a] shadow-[0_2px_0_rgba(255,255,255,0.05)]"
-                  : "border-black/[0.07] bg-white shadow-[0_2px_0_rgba(0,0,0,0.08)]"
-              }`}
-            />
+            <div key={i} className="rounded-[5px] border border-black/[0.07] bg-white shadow-[0_2px_0_rgba(0,0,0,0.08)]" />
           ))}
         </div>
       </CanvasFrame>
@@ -207,33 +196,29 @@ export default function CanvasContent({ isDarkMode = false }: CanvasContentProps
       <section className="absolute" style={{ left: HERO_X, top: HERO_Y, width: 636 }}>
         <div className="grid grid-cols-[1fr_236px] items-start gap-[13px]">
           {/* Profile card */}
-          <div className={`relative h-[216px] overflow-hidden rounded-card border shadow-card ${isDarkMode ? "border-[#3a3a3a] bg-[#1a1a1a]" : "border-borderFaint bg-white"}`}>
-            {!isDarkMode && <PictogramWall />}
+          <div className="relative h-[216px] overflow-hidden rounded-card border border-borderFaint bg-white shadow-card">
+            <PictogramWall />
             <div className="absolute left-4 top-[58px] h-[46px] w-[46px]">
               <AvatarIllustration />
               <span className="absolute bottom-0.5 right-0.5 h-[9px] w-[9px] rounded-full border-2 border-white bg-[#30D158]" />
             </div>
             <div className="absolute inset-x-4 bottom-3.5">
-              <p className={`mb-1 flex items-center gap-1 text-[9px] ${isDarkMode ? "text-[#aaa]" : "text-inkMuted"}`}>
+              <p className="mb-1 flex items-center gap-1 text-[9px] text-inkMuted">
                 <MapPin size={9} strokeWidth={2.2} className="text-[#2B6BFF]" />
                 {lagosTime || "6:45pm"} - Lagos, Nigeria
               </p>
               <div className="flex items-end justify-between">
                 <div>
-                  <p className={`text-[13px] font-semibold leading-snug ${isDarkMode ? "text-[#eee]" : "text-[#111111]"}`}>
-                    Temitope Aiyegbusi
-                  </p>
-                  <p className={`mt-0.5 text-[8.5px] ${isDarkMode ? "text-[#888]" : "text-inkMuted"}`}>Product Designer</p>
+                  <p className="text-[13px] font-semibold leading-snug text-[#111111]">Temitope Aiyegbusi</p>
+                  <p className="mt-0.5 text-[8.5px] text-inkMuted">Product Designer</p>
                 </div>
                 <a
                   href="#"
                   onClick={(e) => e.preventDefault()}
-                  className={`flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[10px] font-semibold transition-opacity hover:opacity-85 ${
-                    isDarkMode ? "bg-[#444] text-white" : "bg-inkStrong text-white"
-                  }`}
+                  className="flex items-center gap-1.5 rounded-full bg-inkStrong px-3.5 py-2 text-[10px] font-semibold text-white transition-opacity hover:opacity-85"
                 >
                   CV
-                  <span className={`flex h-[14px] w-[14px] items-center justify-center rounded-[3px] ${isDarkMode ? "bg-white/20" : "bg-white/20"}`}>
+                  <span className="flex h-[14px] w-[14px] items-center justify-center rounded-[3px] bg-white/20">
                     <Download size={8.5} strokeWidth={2.4} />
                   </span>
                 </a>
@@ -264,18 +249,18 @@ export default function CanvasContent({ isDarkMode = false }: CanvasContentProps
         </div>
 
         {/* Headline */}
-        <h1 className={`mt-12 text-[26px] font-semibold leading-[1.35] tracking-[-0.03em] ${isDarkMode ? "text-[#ddd]" : ""}`}>
-          <span className={isDarkMode ? "text-[#aaa]" : "text-inkMuted"}>Designing Digital Products with</span>
+        <h1 className="mt-12 text-[26px] font-semibold leading-[1.35] tracking-[-0.03em]">
+          <span className="text-inkMuted">Designing Digital Products with</span>
           <br />
-          <span className={isDarkMode ? "text-[#eee]" : "text-ink"}>Intentionality </span>
-          <span className={isDarkMode ? "text-[#aaa]" : "text-inkMuted"}>and</span>
-          <span className={isDarkMode ? "text-[#eee]" : "text-ink"}> Excellence.</span>
+          <span className="text-ink">Intentionality </span>
+          <span className="text-inkMuted">and</span>
+          <span className="text-ink"> Excellence.</span>
         </h1>
 
         {/* Body copy */}
-        <div className={`mt-[53px] max-w-[460px] space-y-5 text-[16px] leading-[1.6] ${isDarkMode ? "text-[#bbb]" : "text-inkSecondary"}`}>
+        <div className="mt-[53px] max-w-[460px] space-y-5 text-[16px] leading-[1.6] text-inkSecondary">
           <p>
-            Hi, I am <span className={isDarkMode ? "font-medium text-[#eee]" : "font-medium text-inkStrong"}>Temitope Aiyegbusi.</span>
+            Hi, I am <span className="font-medium text-inkStrong">Temitope Aiyegbusi.</span>
           </p>
           <p>
             I'm passionate about transforming ideas into clean, functional, and visually captivating products—this
