@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { SlidersHorizontal } from "lucide-react";
 import AppearanceDropdown from "./AppearanceDropdown";
+
+/** Three short rounded horizontal lines — a clean macOS-style menu glyph. */
+function MenuGlyph() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3 4.5h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M3 8h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M3 11.5h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export default function TopNav() {
   const [open, setOpen] = useState(false);
@@ -52,12 +62,13 @@ export default function TopNav() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.26, duration: 0.5, ease: "easeOut" }}
           onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Close appearance settings" : "Open appearance settings"}
+          aria-label={open ? "Close appearance menu" : "Open appearance menu"}
           aria-expanded={open}
           aria-haspopup="dialog"
-          className="liquid-glass flex h-11 w-11 items-center justify-center rounded-full text-inkStrong/75 transition-[transform,color] duration-150 hover:scale-105 hover:text-inkStrong active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 focus-visible:ring-offset-black/10"
+          className="liquid-glass flex h-11 w-11 items-center justify-center rounded-full text-white transition-[transform] duration-150 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 focus-visible:ring-offset-black/10"
+          style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.22))" }}
         >
-          <SlidersHorizontal size={15} strokeWidth={1.9} />
+          <MenuGlyph />
         </motion.button>
 
         <AnimatePresence>
