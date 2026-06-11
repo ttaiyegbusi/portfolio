@@ -32,10 +32,9 @@ export const BACKGROUNDS: BackgroundOption[] = [
     css: `linear-gradient(160deg, #f6d365 0%, #fda085 60%, #f093fb 100%)`,
   },
   {
-    id: "ocean-ink",
-    name: "Ocean Ink",
-    isDark: true,
-    css: `linear-gradient(160deg, #0f2027 0%, #203a43 50%, #2c5364 100%)`,
+    id: "sky-candy",
+    name: "Sky Candy",
+    css: `linear-gradient(160deg, #89f7fe 0%, #66a6ff 100%)`,
   },
   {
     id: "frost",
@@ -48,16 +47,14 @@ export const BACKGROUNDS: BackgroundOption[] = [
     css: `linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%)`,
   },
   {
-    id: "aurora-noir",
-    name: "Aurora Noir",
-    isDark: true,
-    css: `linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 40%, #16213e 70%, #0f3460 100%)`,
+    id: "grape-soda",
+    name: "Grape Soda",
+    css: `linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)`,
   },
   {
-    id: "midnight-oil",
-    name: "Midnight Oil",
-    isDark: true,
-    css: `linear-gradient(160deg, #141e30 0%, #243b55 100%)`,
+    id: "aqua-splash",
+    name: "Aqua Splash",
+    css: `linear-gradient(160deg, #43e97b 0%, #38f9d7 100%)`,
   },
   {
     id: "lavender-marble",
