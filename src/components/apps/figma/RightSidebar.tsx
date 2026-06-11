@@ -2,14 +2,27 @@ import { ArrowUpRight, Copy, Github, Link2, Linkedin, Moon, Users } from "lucide
 import { DribbbleGlyph, XGlyph } from "./glyphs";
 
 const SOCIALS = [
-  { label: "X (formerly Twitter)", icon: <XGlyph size={13} />, href: "https://x.com" },
-  { label: "Dribbble", icon: <DribbbleGlyph size={14} />, href: "https://dribbble.com" },
-  { label: "Github", icon: <Github size={14} strokeWidth={1.5} />, href: "https://github.com" },
-  { label: "Website", icon: <Link2 size={14} strokeWidth={1.5} />, href: "#" },
-  { label: "LinkedIn", icon: <Linkedin size={14} strokeWidth={1.5} />, href: "https://linkedin.com" },
+  { label: "X (formerly Twitter)", icon: <XGlyph size={13} />, href: "https://x.com/aiyegbusitope" },
+  { label: "Dribbble", icon: <DribbbleGlyph size={14} />, href: "https://dribbble.com/ttaiyegbusi" },
+  { label: "Github", icon: <Github size={14} strokeWidth={1.5} />, href: "https://github.com/ttaiyegbusi" },
+  { label: "Website", icon: <Link2 size={14} strokeWidth={1.5} />, href: "https://tta.framer.website/" },
+  { label: "LinkedIn", icon: <Linkedin size={14} strokeWidth={1.5} />, href: "https://www.linkedin.com/in/ttaiyegbusi/" },
 ];
 
-export default function RightSidebar() {
+interface RightSidebarProps {
+  isDarkMode?: boolean;
+  onToggleDarkMode?: () => void;
+}
+
+export default function RightSidebar({ isDarkMode = false, onToggleDarkMode }: RightSidebarProps) {
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText("aiyegbusitope@gmail.com");
+    } catch (err) {
+      console.error("Failed to copy email:", err);
+    }
+  };
+
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-panel border border-borderLight bg-white/90 shadow-panel backdrop-blur-sm">
       {/* Profile header */}
@@ -23,8 +36,20 @@ export default function RightSidebar() {
 
       {/* Utility icon row */}
       <div className="flex h-[34px] shrink-0 items-center gap-4 border-b border-borderFaint px-3.5 text-iconSoft">
-        <Moon size={13} strokeWidth={1.5} />
-        <Copy size={13} strokeWidth={1.5} />
+        <button
+          onClick={onToggleDarkMode}
+          title={isDarkMode ? "Light mode" : "Dark mode"}
+          className="rounded p-1 transition-colors hover:bg-black/[0.05] hover:text-inkSecondary"
+        >
+          <Moon size={13} strokeWidth={1.5} />
+        </button>
+        <button
+          onClick={copyEmail}
+          title="Copy email to clipboard"
+          className="rounded p-1 transition-colors hover:bg-black/[0.05] hover:text-inkSecondary"
+        >
+          <Copy size={13} strokeWidth={1.5} />
+        </button>
         <Users size={13} strokeWidth={1.5} />
       </div>
 

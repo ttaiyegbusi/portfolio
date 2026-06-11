@@ -15,22 +15,31 @@ export default function FigmaApp({ controls, dragHandleProps }: AppContentProps)
   const [sidebarsVisible, setSidebarsVisible] = useState(true);
   const [activePage, setActivePage] = useState("About Me");
   const [focusKey, setFocusKey] = useState(0);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const selectPage = (page: string) => {
     setActivePage(page);
-    setFocusKey((k) => k + 1); // re-trigger the pan even if the same page is clicked
+    setFocusKey((k) => k + 1);
   };
 
   return (
-    <div className="flex h-full flex-col">
-      {/* ----- Tab bar: doubles as the window's title bar / drag handle ----- */}
+    <div className={`flex h-full flex-col ${isDarkMode ? "bg-[#1a1a1a] text-white" : ""}`}>
+      {/* ----- Tab bar ----- */}
       <header
         {...dragHandleProps}
-        className="flex h-[38px] shrink-0 cursor-default select-none items-stretch border-b border-borderLight bg-chrome"
+        className={`flex h-[38px] shrink-0 cursor-default select-none items-stretch border-b ${
+          isDarkMode ? "border-[#2a2a2a] bg-[#232323]" : "border-borderLight bg-chrome"
+        }`}
       >
-        <div className="flex items-center border-r border-borderLight px-4">{controls}</div>
+        <div className={`flex items-center border-r ${isDarkMode ? "border-[#2a2a2a]" : "border-borderLight"} px-4`}>
+          {controls}
+        </div>
 
-        <div className="flex h-full items-center border-r border-borderLight px-4 text-[12px] font-semibold text-[#2F2F2F]">
+        <div
+          className={`flex h-full items-center border-r ${isDarkMode ? "border-[#2a2a2a]" : "border-borderLight"} px-4 text-[12px] font-semibold ${
+            isDarkMode ? "text-[#ddd]" : "text-[#2F2F2F]"
+          }`}
+        >
           Figma
         </div>
 
@@ -40,28 +49,32 @@ export default function FigmaApp({ controls, dragHandleProps }: AppContentProps)
               key={`${tab}-${i}`}
               onClick={() => !tab.includes("...") && selectPage(tab)}
               onPointerDown={(e) => e.stopPropagation()}
-              className="group flex shrink-0 items-center gap-2 border-r border-borderLight px-3.5 text-[12px] text-[#636363] transition-colors hover:bg-black/[0.02]"
+              className={`group flex shrink-0 items-center gap-2 border-r px-3.5 text-[12px] transition-colors ${
+                isDarkMode
+                  ? "border-[#2a2a2a] text-[#aaa] hover:bg-white/[0.06]"
+                  : "border-borderLight text-[#636363] hover:bg-black/[0.02]"
+              }`}
             >
               <span className="max-w-[110px] truncate">{tab}</span>
-              <X size={11} strokeWidth={1.8} className="text-[#9a9a9a] opacity-70 transition-opacity group-hover:opacity-100" />
+              <X size={11} strokeWidth={1.8} className={`${isDarkMode ? "text-[#666]" : "text-[#9a9a9a]"} opacity-70 transition-opacity group-hover:opacity-100`} />
             </button>
           ))}
         </div>
 
         <div className="ml-auto flex items-center gap-1.5 px-4">
           {[0, 1, 2].map((i) => (
-            <span key={i} className="h-[7px] w-[7px] rounded-full bg-[#D5D5D5]" />
+            <span key={i} className={`h-[7px] w-[7px] rounded-full ${isDarkMode ? "bg-[#555]" : "bg-[#D5D5D5]"}`} />
           ))}
         </div>
       </header>
 
-      {/* ------------------------------- Body ------------------------------- */}
-      <div className="relative flex-1 overflow-hidden bg-windowBody">
+      {/* ------ Body ------ */}
+      <div className={`relative flex-1 overflow-hidden ${isDarkMode ? "bg-[#0f0f0f]" : "bg-windowBody"}`}>
         <FigmaCanvas focusPoint={FRAME_CENTERS[activePage] ?? null} focusKey={focusKey}>
-          <CanvasContent />
+          <CanvasContent isDarkMode={isDarkMode} />
         </FigmaCanvas>
 
-        {/* Floating sidebars (overlay the canvas, like the screenshot) */}
+        {/* Floating sidebars */}
         <AnimatePresence>
           {sidebarsVisible && (
             <motion.aside
@@ -76,6 +89,7 @@ export default function FigmaApp({ controls, dragHandleProps }: AppContentProps)
                 activePage={activePage}
                 onSelectPage={selectPage}
                 onCollapse={() => setSidebarsVisible(false)}
+                isDarkMode={isDarkMode}
               />
             </motion.aside>
           )}
@@ -88,12 +102,12 @@ export default function FigmaApp({ controls, dragHandleProps }: AppContentProps)
               transition={spring}
               className="absolute bottom-[54px] right-[26px] top-[52px] w-[212px]"
             >
-              <RightSidebar />
+              <RightSidebar isDarkMode={isDarkMode} onToggleDarkMode={() => setIsDarkMode((v) => !v)} />
             </motion.aside>
           )}
         </AnimatePresence>
 
-        {/* Floating handle to bring the sidebars back */}
+        {/* Floating restore handle */}
         <AnimatePresence>
           {!sidebarsVisible && (
             <motion.button
