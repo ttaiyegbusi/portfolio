@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { AppDefinition } from "../types";
 import { useWindowManager } from "../context/WindowManager";
 import { DOCK_CLEARANCE } from "../data/apps";
@@ -22,6 +22,7 @@ export default function AppWindow({ app }: { app: AppDefinition }) {
   const { windows, zTop, focusApp, closeApp, minimizeApp, toggleMaximize, setBounds } = useWindowManager();
   const win = windows[app.id];
   const [interacting, setInteracting] = useState(false);
+  const reduceMotion = useReducedMotion();
   const boundsRef = useRef(win.bounds);
   boundsRef.current = win.bounds;
 
@@ -128,7 +129,11 @@ export default function AppWindow({ app }: { app: AppDefinition }) {
       onPointerDownCapture={() => focusApp(app.id)}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.16 } }}
+      exit={
+        reduceMotion
+          ? { opacity: 0, transition: { duration: 0.18 } }
+          : { opacity: 0, scale: 0.92, y: 10, transition: { duration: 0.22, ease: [0.32, 0.72, 0, 1] } }
+      }
     >
       {/* Inner shell: handles open spring + minimize-to-dock travel */}
       <motion.div
@@ -136,23 +141,44 @@ export default function AppWindow({ app }: { app: AppDefinition }) {
         className={`relative flex h-full w-full flex-col overflow-hidden rounded-window border border-white/55 bg-windowBody ${
           isFocused ? "shadow-window" : "shadow-[0_14px_40px_rgba(0,0,0,0.07)]"
         }`}
-        initial={{ scale: 0.94, opacity: 0, y: 14 }}
+        style={{ transformOrigin: "50% 50%", willChange: "transform, opacity" }}
+        initial={reduceMotion ? { opacity: 0 } : { scale: 0.94, opacity: 0, y: 14 }}
         animate={
           win.minimized
-            ? {
-                x: win.minimizeTarget?.dx ?? 0,
-                y: win.minimizeTarget?.dy ?? 600,
-                scale: 0.06,
-                opacity: 0,
-                transition: { duration: 0.42, ease: [0.32, 0.72, 0, 1] },
-              }
-            : {
-                x: 0,
-                y: 0,
-                scale: 1,
-                opacity: 1,
-                transition: { type: "spring", stiffness: 320, damping: 30 },
-              }
+            ? reduceMotion
+              ? { opacity: 0, transition: { duration: 0.2 } }
+              : {
+                  // Collapse into the matching dock icon: travel + shrink,
+                  // opacity holds while moving and only fades at the very end,
+                  // corners round off as the window becomes icon-sized.
+                  x: win.minimizeTarget?.dx ?? 0,
+                  y: win.minimizeTarget?.dy ?? window.innerHeight / 2,
+                  scale: 0.05,
+                  opacity: [1, 1, 0.85, 0],
+                  borderRadius: "26px",
+                  transition: {
+                    duration: 0.5,
+                    ease: [0.32, 0.72, 0, 1],
+                    opacity: { duration: 0.5, times: [0, 0.55, 0.82, 1] },
+                  },
+                }
+            : reduceMotion
+              ? { x: 0, y: 0, scale: 1, opacity: 1, transition: { duration: 0.2 } }
+              : {
+                  // Restore: expand back out of the dock icon with a soft spring.
+                  x: 0,
+                  y: 0,
+                  scale: 1,
+                  opacity: 1,
+                  borderRadius: "12px",
+                  transition: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                    mass: 0.9,
+                    opacity: { duration: 0.28, ease: "easeOut" },
+                  },
+                }
         }
       >
         {app.customChrome ? (

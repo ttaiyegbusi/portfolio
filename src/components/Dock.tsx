@@ -15,18 +15,21 @@ function DockIcon({ app }: { app: AppDefinition }) {
 
   return (
     <div className="relative flex flex-col items-center">
-      {/* macOS-style hover label — pill floating well above the icon */}
+      {/* macOS-style hover label — wrapper owns centering so the motion
+          transform (scale/y) can never knock the pill off-center */}
       <AnimatePresence>
         {hovered && (
-          <motion.span
-            initial={{ opacity: 0, y: 4, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 3, scale: 0.94, transition: { duration: 0.12 } }}
-            transition={{ type: "spring", stiffness: 480, damping: 30 }}
-            className="glass-tooltip pointer-events-none absolute bottom-[calc(100%+12px)] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-[5px] text-[12px] font-medium leading-none text-inkStrong"
-          >
-            {app.name}
-          </motion.span>
+          <span className="pointer-events-none absolute bottom-[calc(100%+12px)] left-1/2 z-20 -translate-x-1/2">
+            <motion.span
+              initial={{ opacity: 0, y: 4, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 3, scale: 0.95, transition: { duration: 0.12 } }}
+              transition={{ type: "spring", stiffness: 480, damping: 30 }}
+              className="glass-tooltip block whitespace-nowrap rounded-full px-2.5 py-[5px] text-[12px] font-medium leading-none text-inkStrong"
+            >
+              {app.name}
+            </motion.span>
+          </span>
         )}
       </AnimatePresence>
 
