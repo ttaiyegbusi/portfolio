@@ -1,8 +1,3 @@
-/**
- * 12 desktop backgrounds: 10 real high-quality images (center/cover, no pixelation)
- * + 2 from original gradient set to complete the 12.
- */
-
 export interface BackgroundOption {
   id: string;
   name: string;
@@ -17,61 +12,69 @@ export const BACKGROUNDS: BackgroundOption[] = [
     css: `url("/wallpaper.jpg") center / cover no-repeat`,
   },
   {
-    id: "mesh-gradient",
+    id: "mesh-1",
     name: "Mesh Gradient",
-    css: `url("/backgrounds/Gradient-mesh-1.png") center / cover no-repeat`,
+    css: `url("/backgrounds/Gradient-mesh-1.jpg") center / cover no-repeat`,
   },
   {
-    id: "halo-blush",
+    id: "mesh-3",
+    name: "Mesh Bloom",
+    css: `url("/backgrounds/Gradient-mesh-3.jpg") center / cover no-repeat`,
+  },
+  {
+    id: "mesh-5",
+    name: "Mesh Dusk",
+    css: `url("/backgrounds/Gradient-mesh-5.jpg") center / cover no-repeat`,
+  },
+  {
+    id: "halo-1",
     name: "Halo Blush",
-    css: `url("/backgrounds/Gradient-halo-1.png") center / cover no-repeat`,
+    css: `url("/backgrounds/Gradient-halo-1.jpg") center / cover no-repeat`,
   },
   {
-    id: "neon-ribbons",
+    id: "halo-3",
+    name: "Halo Golden",
+    css: `url("/backgrounds/Gradient-halo-3.jpg") center / cover no-repeat`,
+  },
+  {
+    id: "halo-4",
+    name: "Halo Cyan",
+    css: `url("/backgrounds/Gradient-halo-4.jpg") center / cover no-repeat`,
+  },
+  {
+    id: "bg-1",
+    name: "Aurora Silk",
+    isDark: true,
+    css: `url("/backgrounds/Background -1.jpg") center / cover no-repeat`,
+  },
+  {
+    id: "bg-2",
+    name: "Petal Swirl",
+    css: `url("/backgrounds/Background -2.jpg") center / cover no-repeat`,
+  },
+  {
+    id: "bg-3",
     name: "Neon Ribbons",
     isDark: true,
-    css: `url("/backgrounds/Gradient-halo-2.png") center / cover no-repeat`,
+    css: `url("/backgrounds/Background -3.jpg") center / cover no-repeat`,
   },
   {
-    id: "teal-void",
+    id: "bg-7",
     name: "Teal Void",
     isDark: true,
-    css: `url("/backgrounds/Background_-1.png") center / cover no-repeat`,
+    css: `url("/backgrounds/Background -7.jpg") center / cover no-repeat`,
   },
   {
-    id: "golden-halo",
-    name: "Golden Halo",
-    css: `url("/backgrounds/Gradient-halo-3.png") center / cover no-repeat`,
+    id: "bg-8",
+    name: "Ember Flow",
+    isDark: true,
+    css: `url("/backgrounds/Background -8.jpg") center / cover no-repeat`,
   },
   {
-    id: "cyan-dream",
-    name: "Cyan Dream",
-    css: `url("/backgrounds/Gradient-halo-4.png") center / cover no-repeat`,
-  },
-  {
-    id: "frost-mist",
-    name: "Frost Mist",
-    css: `url("/backgrounds/Gradient-halo-5.png") center / cover no-repeat`,
-  },
-  {
-    id: "magenta-burst",
-    name: "Magenta Burst",
-    css: `url("/backgrounds/Gradient-mesh-5.png") center / cover no-repeat`,
-  },
-  {
-    id: "twilight-fade",
-    name: "Twilight Fade",
-    css: `url("/backgrounds/Background_-2.png") center / cover no-repeat`,
-  },
-  {
-    id: "emerald-glow",
-    name: "Emerald Glow",
-    css: `url("/backgrounds/Background_-4.png") center / cover no-repeat`,
-  },
-  {
-    id: "lavender-marble",
-    name: "Lavender Marble",
-    css: `linear-gradient(135deg, #e9defc 0%, #c2a8ff 52%, #9f86f0 100%)`,
+    id: "bg-10",
+    name: "Deep Ocean",
+    isDark: true,
+    css: `url("/backgrounds/Background -10.jpg") center / cover no-repeat`,
   },
 ];
 
