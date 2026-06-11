@@ -63,7 +63,7 @@ export const APPS: Record<AppId, AppDefinition> = {
     id: "dribbble",
     name: "Dribbble",
     minSize: { w: 520, h: 380 },
-    defaultBounds: (vw, vh) => clampBounds(vw * 0.32, vh * 0.16, 780, 560, vw, vh),
+    defaultBounds: (vw, vh) => clampBounds(vw * 0.18, vh * 0.12, 1060, 680, vw, vh),
     render: () => <DribbbleApp />,
     icon: <DribbbleIcon />,
   },

@@ -1,62 +1,110 @@
-import { Eye, Heart } from "lucide-react";
-import { DribbbleIcon } from "../icons/AppIcons";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { PanelLeft, PanelLeftOpen } from "lucide-react";
+import { DribbbleGlyph } from "./figma/glyphs";
 
-const SHOTS = [
-  { title: "Knit — Design Tool Landing", likes: 312, views: "9.4k", bg: "linear-gradient(135deg, #c0ebd0 0%, #8ed8ce 55%, #b6dfeb 100%)", fg: "#0A0D14" },
-  { title: "icametoo — Event App", likes: 248, views: "7.1k", bg: "linear-gradient(135deg, #0a0d14 0%, #2a2f3a 60%, #4a5160 100%)", fg: "#FFFFFF" },
-  { title: "Football Booth — Match Hub", likes: 197, views: "5.8k", bg: "linear-gradient(135deg, #9bd5a3 0%, #5ec550 70%, #2f8f3f 100%)", fg: "#FFFFFF" },
-  { title: "Chain Core — Web3 Dashboard", likes: 286, views: "8.2k", bg: "linear-gradient(135deg, #dcf0fb 0%, #b6dfeb 45%, #3099de 100%)", fg: "#0A0D14" },
-  { title: "Keyboard — 3D Exploration", likes: 354, views: "11k", bg: "linear-gradient(135deg, #dec872 0%, #f3bf52 55%, #bbd190 100%)", fg: "#0A0D14" },
-  { title: "Mobile Banking Concept", likes: 221, views: "6.3k", bg: "linear-gradient(135deg, #f6f6f6 0%, #e6e6e6 50%, #c1c1c1 100%)", fg: "#0A0D14" },
-];
+const YEARS = ["2026", "2025", "2024", "2023", "2022"] as const;
+type Year = (typeof YEARS)[number];
+
+/** explorations per year — 12 each, filling the 4-column grid */
+const SHOTS: Record<Year, string[]> = {
+  "2026": ["Football Booth", "Football Booth", "Knit", "Knit", "icametoo", "icametoo", "Chain Core", "Chain Core", "Football Booth", "Knit", "icametoo", "Chain Core"],
+  "2025": ["Knit", "Knit", "Knit", "icametoo", "icametoo", "Football Booth", "Football Booth", "Chain Core", "Chain Core", "Keyboard", "Keyboard", "Knit"],
+  "2024": ["icametoo", "icametoo", "Keyboard", "Keyboard", "Mobile Banking", "Mobile Banking", "icametoo", "Keyboard", "Mobile Banking", "icametoo", "Keyboard", "Mobile Banking"],
+  "2023": ["Mobile App", "Mobile App", "Landing Page", "Landing Page", "Dashboard", "Dashboard", "Mobile App", "Landing Page", "Dashboard", "Mobile App", "Landing Page", "Dashboard"],
+  "2022": ["Logofolio", "Logofolio", "UI Challenge", "UI Challenge", "Icon Set", "Icon Set", "Logofolio", "UI Challenge", "Icon Set", "Logofolio", "UI Challenge", "Icon Set"],
+};
+
+const spring = { type: "spring", stiffness: 380, damping: 34 } as const;
 
 export default function DribbbleApp() {
-  return (
-    <div className="flex h-full flex-col bg-white">
-      <header className="flex items-center justify-between border-b border-borderLight px-5 py-3">
-        <div className="flex items-center gap-2.5">
-          <div className="h-6 w-6">
-            <DribbbleIcon />
-          </div>
-          <div>
-            <p className="text-[13px] font-semibold leading-tight text-inkStrong">Recent Shots</p>
-            <p className="text-[10px] leading-tight text-inkTertiary">dribbble.com/temitope</p>
-          </div>
-        </div>
-        <span className="rounded-full border border-borderSubtle bg-[#F7F7F7] px-2.5 py-1 text-[10px] font-medium text-inkMuted">
-          Product Design
-        </span>
-      </header>
+  const [year, setYear] = useState<Year>("2026");
+  const [sidebarVisible, setSidebarVisible] = useState(true);
 
-      <div className="app-scroll grid flex-1 grid-cols-2 gap-4 overflow-y-auto p-5 xl:grid-cols-3">
-        {SHOTS.map((shot) => (
-          <article key={shot.title} className="group cursor-pointer">
-            <div
-              className="relative flex aspect-[4/3] items-end overflow-hidden rounded-card border border-borderFaint shadow-card transition-transform duration-300 group-hover:-translate-y-0.5"
-              style={{ background: shot.bg }}
-            >
-              <span
-                className="px-4 pb-3 text-[15px] font-semibold leading-snug tracking-tight opacity-90"
-                style={{ color: shot.fg }}
-              >
-                {shot.title.split("—")[0]}
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            </div>
-            <div className="mt-2 flex items-center justify-between">
-              <p className="truncate text-[12px] font-medium text-inkSecondary">{shot.title}</p>
-              <div className="ml-2 flex shrink-0 items-center gap-2.5 text-inkTertiary">
-                <span className="flex items-center gap-1 text-[10px]">
-                  <Heart size={11} strokeWidth={1.8} /> {shot.likes}
-                </span>
-                <span className="flex items-center gap-1 text-[10px]">
-                  <Eye size={11} strokeWidth={1.8} /> {shot.views}
-                </span>
-              </div>
-            </div>
-          </article>
-        ))}
+  return (
+    <div className="relative h-full overflow-hidden bg-windowBody">
+      {/* ------------------------- shots grid ------------------------- */}
+      <div
+        className="app-scroll h-full overflow-y-auto py-9 pr-10 transition-[padding] duration-300"
+        style={{ paddingLeft: sidebarVisible ? 248 : 64 }}
+      >
+        <div
+          className="grid gap-x-7 gap-y-9"
+          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))" }}
+        >
+          {SHOTS[year].map((name, i) => (
+            <figure key={`${year}-${i}`} className="group cursor-pointer">
+              <div className="aspect-[4/5] w-full rounded-[8px] border border-black/[0.05] bg-[#F7F7F7] shadow-card transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-black/[0.09] group-hover:bg-[#FAFAFA]" />
+              <figcaption className="mt-2.5 text-center text-[12px] text-inkSecondary">{name}</figcaption>
+            </figure>
+          ))}
+        </div>
       </div>
+
+      {/* --------------------- floating sidebar --------------------- */}
+      <AnimatePresence>
+        {sidebarVisible && (
+          <motion.aside
+            key="explorations"
+            initial={{ x: -240, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -240, opacity: 0 }}
+            transition={spring}
+            className="absolute bottom-[26px] left-[26px] top-[26px] w-[188px]"
+          >
+            <div className="flex h-full flex-col overflow-hidden rounded-panel border border-borderLight bg-white/90 shadow-panel backdrop-blur-sm">
+              <div className="flex h-11 shrink-0 items-center justify-between border-b border-borderFaint px-3.5">
+                <span className="text-[15px] font-medium tracking-tight text-[#626262]">Explorations</span>
+                <button
+                  onClick={() => setSidebarVisible(false)}
+                  title="Hide sidebar"
+                  className="rounded p-1 text-iconSoft transition-colors hover:bg-black/[0.05] hover:text-inkSecondary"
+                >
+                  <PanelLeft size={14} strokeWidth={1.6} />
+                </button>
+              </div>
+              <div className="px-2 pt-2.5">
+                {YEARS.map((y) => {
+                  const isActive = y === year;
+                  return (
+                    <button
+                      key={y}
+                      onClick={() => setYear(y)}
+                      className={`flex h-[31px] w-full items-center gap-2 rounded-md px-1.5 text-left text-[12.5px] transition-colors ${
+                        isActive ? "bg-black/[0.05] text-inkSecondary" : "text-inkTertiary hover:bg-black/[0.03]"
+                      }`}
+                    >
+                      <span className={isActive ? "text-inkMuted" : "text-iconMuted"}>
+                        <DribbbleGlyph size={12} />
+                      </span>
+                      {y}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="flex-1" />
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
+
+      {/* restore handle when hidden */}
+      <AnimatePresence>
+        {!sidebarVisible && (
+          <motion.button
+            key="handle"
+            initial={{ x: -36, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -36, opacity: 0 }}
+            transition={spring}
+            onClick={() => setSidebarVisible(true)}
+            title="Show sidebar"
+            className="glass-tooltip absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full p-2 text-inkSecondary transition-transform hover:scale-110"
+          >
+            <PanelLeftOpen size={15} strokeWidth={1.7} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

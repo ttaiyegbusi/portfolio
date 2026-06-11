@@ -161,12 +161,17 @@ export default function AppWindow({ app }: { app: AppDefinition }) {
           <>
             <header
               {...dragHandleProps}
-              className="flex h-[34px] shrink-0 cursor-default select-none items-center border-b border-borderLight bg-chrome px-3.5"
+              className="flex h-[38px] shrink-0 cursor-default select-none items-stretch border-b border-borderLight bg-chrome"
             >
-              {controls}
-              <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 text-[12px] font-medium text-inkSecondary">
+              <div className="flex items-center border-r border-borderLight px-4">{controls}</div>
+              <div className="flex items-center border-r border-borderLight px-4 text-[12px] font-semibold text-[#2F2F2F]">
                 {app.name}
-              </span>
+              </div>
+              <div className="ml-auto flex items-center gap-1.5 px-4">
+                {[0, 1, 2].map((i) => (
+                  <span key={i} className="h-[7px] w-[7px] rounded-full bg-[#D5D5D5]" />
+                ))}
+              </div>
             </header>
             <div className="min-h-0 flex-1">
               {app.render({ appId: app.id, isMaximized: win.maximized, controls, dragHandleProps })}

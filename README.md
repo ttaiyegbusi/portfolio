@@ -88,4 +88,3 @@ All colors, radii, shadows, and spacing come from `dashboard_design_extraction.m
 window body `#F1F1F1`, chrome `#F6F6F6`, borders `#EDEDED/#E6E6E6/#F0F0F0`, the muted text scale (`#020202 → #C1C1C1`), traffic lights `#EA6B65 / #F3BF52 / #5EC550`, and the dock's glass recipe (`rgba(255,255,255,0.18)` + `blur(24px) saturate(155%)` + white border + inset highlights). The wallpaper uses your image with the extracted gradient as a loading fallback.
 
 **Typography rule:** IBM Plex Sans, everywhere. It's first in the Tailwind `font-sans` stack and served from `public/fonts/` via `@font-face` (weights 100–700 through the variable axis).
-# portfolio
