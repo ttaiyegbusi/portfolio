@@ -11,18 +11,38 @@ interface DesignItem {
 }
 
 const designItems: DesignItem[] = [
-  { id: "1", title: "Clockin App", year: 2026 },
-  { id: "2", title: "Dashboard Design", year: 2026 },
-  { id: "3", title: "Mobile Exploration", year: 2026 },
-  { id: "4", title: "Design System", year: 2026 },
-  { id: "5", title: "Football Booth", year: 2025 },
-  { id: "6", title: "Task Management", year: 2025 },
-  { id: "7", title: "Landing Page", year: 2025 },
-  { id: "8", title: "Mobile App", year: 2025 },
-  { id: "9", title: "icametoo", year: 2024 },
-  { id: "10", title: "Keyboard App", year: 2024 },
-  { id: "11", title: "Chain Core", year: 2024 },
-  { id: "12", title: "Portfolio Concept", year: 2024 },
+  // 2026
+  { id: "1", title: "Account Settings", year: 2026, imageUrl: "/images/dribbble/ACCOUNT SETTINGS.png" },
+  { id: "2", title: "Messages", year: 2026, imageUrl: "/images/dribbble/Messages.png" },
+  { id: "3", title: "Suggestion History", year: 2026, imageUrl: "/images/dribbble/Suggestion History.png" },
+  { id: "4", title: "View Event", year: 2026, imageUrl: "/images/dribbble/VIew Event.png" },
+  
+  // 2025
+  { id: "5", title: "Campaigns", year: 2025, imageUrl: "/images/dribbble/Campaigns.png" },
+  { id: "6", title: "Classic Italian Carbonara", year: 2025, imageUrl: "/images/dribbble/Classic Italian Carbonara_ The Authentic Recipe.png" },
+  { id: "7", title: "Complete Your Account", year: 2025, imageUrl: "/images/dribbble/Complete your account now.png" },
+  { id: "8", title: "Confirm Identity", year: 2025, imageUrl: "/images/dribbble/Confirm your identity.png" },
+  { id: "9", title: "Core AI", year: 2025, imageUrl: "/images/dribbble/Core Ai.png" },
+  { id: "10", title: "Manual Journal Entry", year: 2025, imageUrl: "/images/dribbble/Create  Manual Journal Entry.png" },
+  { id: "11", title: "Documents", year: 2025, imageUrl: "/images/dribbble/Documents.png" },
+  { id: "12", title: "Journal Entries", year: 2025, imageUrl: "/images/dribbble/Journal  Entries.png" },
+  { id: "13", title: "Messages", year: 2025, imageUrl: "/images/dribbble/Messages.png" },
+  { id: "14", title: "More Options", year: 2025, imageUrl: "/images/dribbble/More dropdown 1.png" },
+  { id: "15", title: "Publication Selection", year: 2025, imageUrl: "/images/dribbble/Publication selection.png" },
+  
+  // 2024-2022 placeholders
+  { id: "16", title: "icametoo", year: 2024 },
+  { id: "17", title: "Keyboard App", year: 2024 },
+  { id: "18", title: "Chain Core", year: 2024 },
+  { id: "19", title: "Portfolio Concept", year: 2024 },
+  { id: "20", title: "SaaS Platform", year: 2023 },
+  { id: "21", title: "Fintech App", year: 2023 },
+  { id: "22", title: "Social Network", year: 2023 },
+  { id: "23", title: "E-commerce", year: 2023 },
+  { id: "24", title: "Knit", year: 2022 },
+  { id: "25", title: "Collaboration Tool", year: 2022 },
+  { id: "26", title: "Music App", year: 2022 },
+  { id: "27", title: "Health Tracker", year: 2022 },
 ];
 
 export default function DribbbleApp() {
