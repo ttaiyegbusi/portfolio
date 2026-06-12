@@ -6,6 +6,7 @@ import ImagePreviewApp from "../components/apps/ImagePreviewApp";
 import FinderApp from "../components/apps/FinderApp";
 import ProjectsApp from "../components/apps/ProjectsApp";
 import { DribbbleIcon, FigmaIcon, FinderIcon, NotesIcon, ProjectsIcon } from "../components/icons/AppIcons";
+import PreviewIcon from "../components/icons/PreviewIcon";
 
 /** vertical space reserved at the bottom of the screen for the dock */
 export const DOCK_CLEARANCE = 92;
@@ -73,8 +74,8 @@ export const APPS: Record<AppId, AppDefinition> = {
     name: "Preview",
     minSize: { w: 480, h: 360 },
     defaultBounds: (vw, vh) => clampBounds(vw * 0.25, vh * 0.15, 900, 700, vw, vh),
-    render: (props) => <ImagePreviewApp {...props} appId="imagePreview" />,
-    icon: <DribbbleIcon />,
+    render: () => <ImagePreviewApp />,
+    icon: <PreviewIcon />,
   },
 };
 

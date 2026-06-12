@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import type { AppDefinition } from "../types";
 import { useWindowManager } from "../context/WindowManager";
+import { usePreview } from "../context/PreviewContext";
 import { DOCK_CLEARANCE } from "../data/apps";
 import WindowControls from "./WindowControls";
 
@@ -20,6 +21,7 @@ const RESIZE_HANDLES: { dir: ResizeDir; className: string; cursor: string }[] = 
 
 export default function AppWindow({ app }: { app: AppDefinition }) {
   const { windows, zTop, focusApp, closeApp, minimizeApp, toggleMaximize, setBounds } = useWindowManager();
+  const { title: previewTitle } = usePreview();
   const win = windows[app.id];
   const [interacting, setInteracting] = useState(false);
   const reduceMotion = useReducedMotion();
@@ -191,7 +193,7 @@ export default function AppWindow({ app }: { app: AppDefinition }) {
             >
               <div className="flex items-center border-r border-borderLight px-4">{controls}</div>
               <div className="flex items-center border-r border-borderLight px-4 text-[12px] font-semibold text-[#2F2F2F]">
-                {app.name}
+                {app.id === "imagePreview" ? previewTitle || "Preview" : app.name}
               </div>
               <div className="ml-auto flex items-center gap-1.5 px-4">
                 {[0, 1, 2].map((i) => (
