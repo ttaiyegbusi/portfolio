@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type AppId = "finder" | "projects" | "figma" | "notes" | "dribbble";
+export type AppId = "finder" | "projects" | "figma" | "notes" | "dribbble" | "imagePreview";
 
 export interface Bounds {
   x: number;

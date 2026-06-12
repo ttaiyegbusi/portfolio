@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePreview } from "../../context/PreviewContext";
+import { useWindowManager } from "../../context/WindowManager";
 
 const YEARS = [2026, 2025, 2024, 2023, 2022];
 
@@ -47,11 +49,19 @@ const designItems: DesignItem[] = [
 
 export default function DribbbleApp() {
   const [selectedYear, setSelectedYear] = useState(2026);
+  const { setPreview } = usePreview();
+  const { openApp } = useWindowManager();
 
   const filteredItems = designItems.filter((item) => item.year === selectedYear);
 
+  const handleImageClick = (item: DesignItem) => {
+    if (!item.imageUrl) return;
+    setPreview(item.imageUrl, item.title);
+    openApp("imagePreview");
+  };
+
   return (
-    <div className="flex h-full w-full bg-white/50 p-4">
+    <div className="flex h-full w-full bg-[#F7F7F7] p-4">
       {/* Floating sidebar */}
       <aside className="w-[180px] shrink-0 rounded-lg bg-white/80 backdrop-blur-sm shadow-sm border border-white/40 p-4 flex flex-col">
         <h3 className="mb-4 text-[13px] font-semibold text-inkStrong">Explorations</h3>
@@ -79,21 +89,22 @@ export default function DribbbleApp() {
         <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))" }}>
           <AnimatePresence mode="popLayout">
             {filteredItems.map((item) => (
-              <motion.div
+              <motion.button
                 key={item.id}
+                onClick={() => handleImageClick(item)}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                className="flex flex-col gap-2 cursor-pointer group"
+                className="flex flex-col gap-2 cursor-pointer group text-left"
               >
-                <div className="aspect-square rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 group-hover:shadow-md transition-shadow overflow-hidden flex items-center justify-center p-4">
+                <div className="aspect-square rounded-lg bg-[#F7F7F7] group-hover:shadow-md transition-shadow overflow-hidden flex items-center justify-center p-4 border border-slate-200">
                   {item.imageUrl && (
                     <img src={item.imageUrl} alt={item.title} className="w-full h-full object-contain" />
                   )}
                 </div>
                 <p className="text-center text-[12px] font-medium text-inkStrong">{item.title}</p>
-              </motion.div>
+              </motion.button>
             ))}
           </AnimatePresence>
         </div>

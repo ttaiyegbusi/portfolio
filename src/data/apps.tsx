@@ -2,6 +2,7 @@ import type { AppDefinition, AppId } from "../types";
 import FigmaApp from "../components/apps/figma/FigmaApp";
 import NotesApp from "../components/apps/NotesApp";
 import DribbbleApp from "../components/apps/DribbbleApp";
+import ImagePreviewApp from "../components/apps/ImagePreviewApp";
 import FinderApp from "../components/apps/FinderApp";
 import ProjectsApp from "../components/apps/ProjectsApp";
 import { DribbbleIcon, FigmaIcon, FinderIcon, NotesIcon, ProjectsIcon } from "../components/icons/AppIcons";
@@ -65,6 +66,14 @@ export const APPS: Record<AppId, AppDefinition> = {
     minSize: { w: 520, h: 380 },
     defaultBounds: (vw, vh) => clampBounds(vw * 0.18, vh * 0.12, 1060, 680, vw, vh),
     render: () => <DribbbleApp />,
+    icon: <DribbbleIcon />,
+  },
+  imagePreview: {
+    id: "imagePreview",
+    name: "Preview",
+    minSize: { w: 480, h: 360 },
+    defaultBounds: (vw, vh) => clampBounds(vw * 0.25, vh * 0.15, 900, 700, vw, vh),
+    render: (props) => <ImagePreviewApp {...props} appId="imagePreview" />,
     icon: <DribbbleIcon />,
   },
 };
