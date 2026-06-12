@@ -64,7 +64,9 @@ export const APPS: Record<AppId, AppDefinition> = {
     name: "Dribbble",
     minSize: { w: 520, h: 380 },
     defaultBounds: (vw, vh) => clampBounds(vw * 0.18, vh * 0.12, 1060, 680, vw, vh),
-    render: () => <DribbbleApp />,
+    render: ({ controls, dragHandleProps, isMaximized }) => (
+      <DribbbleApp controls={controls} dragHandleProps={dragHandleProps} isMaximized={isMaximized} appId="dribbble" />
+    ),
     icon: <DribbbleIcon />,
   },
 };
