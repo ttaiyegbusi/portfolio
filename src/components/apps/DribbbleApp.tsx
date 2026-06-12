@@ -98,7 +98,7 @@ export default function DribbbleApp() {
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 className="flex flex-col gap-2 cursor-pointer group text-left"
               >
-                <div className="aspect-square rounded-lg bg-[#F7F7F7] group-hover:shadow-md transition-shadow overflow-hidden flex items-center justify-center p-4 border border-slate-200">
+                <div className="aspect-square rounded-lg bg-white overflow-hidden flex items-center justify-center p-4">
                   {item.imageUrl && (
                     <img src={item.imageUrl} alt={item.title} className="w-full h-full object-contain" />
                   )}

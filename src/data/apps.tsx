@@ -85,4 +85,5 @@ export const APP_LIST: AppDefinition[] = [
   APPS.figma,
   APPS.notes,
   APPS.dribbble,
+  APPS.imagePreview,
 ];
