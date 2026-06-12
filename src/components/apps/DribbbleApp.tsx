@@ -32,19 +32,41 @@ const designItems: DesignItem[] = [
   { id: "14", title: "More Options", year: 2025, imageUrl: "/images/dribbble/More dropdown 1.png" },
   { id: "15", title: "Publication Selection", year: 2025, imageUrl: "/images/dribbble/Publication selection.png" },
   
-  // 2024-2022 placeholders
-  { id: "16", title: "icametoo", year: 2024 },
-  { id: "17", title: "Keyboard App", year: 2024 },
-  { id: "18", title: "Chain Core", year: 2024 },
-  { id: "19", title: "Portfolio Concept", year: 2024 },
-  { id: "20", title: "SaaS Platform", year: 2023 },
-  { id: "21", title: "Fintech App", year: 2023 },
-  { id: "22", title: "Social Network", year: 2023 },
-  { id: "23", title: "E-commerce", year: 2023 },
-  { id: "24", title: "Knit", year: 2022 },
-  { id: "25", title: "Collaboration Tool", year: 2022 },
-  { id: "26", title: "Music App", year: 2022 },
-  { id: "27", title: "Health Tracker", year: 2022 },
+  // 2024
+  { id: "16", title: "Chaincore Landing Page", year: 2024, imageUrl: "/images/dribbble/Chaincore - Landing Page.jpg" },
+  { id: "17", title: "Dashboard & Analytics", year: 2024, imageUrl: "/images/dribbble/Dashboard & Analytics.jpg" },
+  { id: "18", title: "Enter Amount", year: 2024, imageUrl: "/images/dribbble/Enter AMount.jpg" },
+  { id: "19", title: "Home 1", year: 2024, imageUrl: "/images/dribbble/Home-1.jpg" },
+  { id: "20", title: "Home", year: 2024, imageUrl: "/images/dribbble/Home.jpg" },
+  { id: "21", title: "Design 1", year: 2024, imageUrl: "/images/dribbble/Image-1.png" },
+  { id: "22", title: "Design 2", year: 2024, imageUrl: "/images/dribbble/Image-2.png" },
+  { id: "23", title: "Design 3", year: 2024, imageUrl: "/images/dribbble/Image-3.png" },
+  { id: "24", title: "Design 4", year: 2024, imageUrl: "/images/dribbble/Image-4.png" },
+  { id: "25", title: "Design 5", year: 2024, imageUrl: "/images/dribbble/Image-5.png" },
+  { id: "26", title: "Design 6", year: 2024, imageUrl: "/images/dribbble/Image-6.png" },
+  { id: "27", title: "Design 7", year: 2024, imageUrl: "/images/dribbble/Image-7.png" },
+  { id: "28", title: "Design", year: 2024, imageUrl: "/images/dribbble/Image.png" },
+  { id: "29", title: "Individual Clients", year: 2024, imageUrl: "/images/dribbble/Individual Clients.jpg" },
+  { id: "30", title: "Input Amount", year: 2024, imageUrl: "/images/dribbble/Input Amount.jpg" },
+  { id: "31", title: "My Profile", year: 2024, imageUrl: "/images/dribbble/My Profile.jpg" },
+  { id: "32", title: "Refer and Earn", year: 2024, imageUrl: "/images/dribbble/Refer and Earn.jpg" },
+  { id: "33", title: "Send Money", year: 2024, imageUrl: "/images/dribbble/Send Money.png" },
+  
+  // 2023
+  { id: "34", title: "About Us", year: 2023, imageUrl: "/images/dribbble/About us.jpg" },
+  { id: "35", title: "Features", year: 2023, imageUrl: "/images/dribbble/Features.jpg" },
+  { id: "36", title: "Hero Section", year: 2023, imageUrl: "/images/dribbble/Hero section.jpg" },
+  { id: "37", title: "Home Page", year: 2023, imageUrl: "/images/dribbble/Home Page.jpg" },
+  { id: "38", title: "Join The Community", year: 2023, imageUrl: "/images/dribbble/JOIN THE COMMUNITY.jpg" },
+  { id: "39", title: "Peniel Day Hero", year: 2023, imageUrl: "/images/dribbble/Peniel Day Hero section.jpg" },
+  { id: "40", title: "Rebank Hero", year: 2023, imageUrl: "/images/dribbble/Rebank Hero section.jpg" },
+  { id: "41", title: "Superrare Hero", year: 2023, imageUrl: "/images/dribbble/Superrare Hero section.jpg" },
+  
+  // 2022 placeholders
+  { id: "42", title: "Knit", year: 2022 },
+  { id: "43", title: "Collaboration Tool", year: 2022 },
+  { id: "44", title: "Music App", year: 2022 },
+  { id: "45", title: "Health Tracker", year: 2022 },
 ];
 
 export default function DribbbleApp() {
