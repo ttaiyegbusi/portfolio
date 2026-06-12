@@ -87,9 +87,9 @@ export default function DribbbleApp() {
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 className="flex flex-col gap-2 cursor-pointer group"
               >
-                <div className="aspect-square rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 group-hover:shadow-md transition-shadow overflow-hidden">
+                <div className="aspect-square rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 group-hover:shadow-md transition-shadow overflow-hidden flex items-center justify-center p-4">
                   {item.imageUrl && (
-                    <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+                    <img src={item.imageUrl} alt={item.title} className="w-full h-full object-contain" />
                   )}
                 </div>
                 <p className="text-center text-[12px] font-medium text-inkStrong">{item.title}</p>
