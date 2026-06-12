@@ -10,7 +10,6 @@ interface DesignItem {
   imageUrl?: string;
 }
 
-// Placeholder — you'll replace with actual images
 const designItems: DesignItem[] = [
   { id: "1", title: "Clockin App", year: 2026 },
   { id: "2", title: "Dashboard Design", year: 2026 },
@@ -32,9 +31,9 @@ export default function DribbbleApp() {
   const filteredItems = designItems.filter((item) => item.year === selectedYear);
 
   return (
-    <div className="flex h-full w-full bg-white">
-      {/* Sidebar */}
-      <aside className="flex w-[200px] shrink-0 flex-col border-r border-borderLight bg-white/60 px-4 py-4">
+    <div className="flex h-full w-full bg-white/50 p-4">
+      {/* Floating sidebar */}
+      <aside className="w-[180px] shrink-0 rounded-lg bg-white/80 backdrop-blur-sm shadow-sm border border-white/40 p-4 flex flex-col">
         <h3 className="mb-4 text-[13px] font-semibold text-inkStrong">Explorations</h3>
         <div className="space-y-1">
           {YEARS.map((year) => (
@@ -56,8 +55,8 @@ export default function DribbbleApp() {
       </aside>
 
       {/* Grid */}
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="grid gap-6 auto-fill" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))" }}>
+      <div className="flex-1 overflow-y-auto pl-4">
+        <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))" }}>
           <AnimatePresence mode="popLayout">
             {filteredItems.map((item) => (
               <motion.div

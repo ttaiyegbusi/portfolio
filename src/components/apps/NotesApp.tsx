@@ -75,17 +75,17 @@ export default function NotesApp() {
   const active = NOTES.find((n) => n.id === activeId) ?? NOTES[0];
 
   return (
-    <div className="flex h-full bg-white">
-      {/* Note list */}
-      <aside className="flex w-[200px] shrink-0 flex-col border-r border-borderLight bg-[#FAFAF8]">
-        <div className="flex items-center justify-between px-3 pb-2 pt-3">
+    <div className="flex h-full bg-white/50 p-4">
+      {/* Floating sidebar */}
+      <aside className="flex w-[200px] shrink-0 flex-col rounded-lg bg-white/80 backdrop-blur-sm shadow-sm border border-white/40 p-3">
+        <div className="flex items-center justify-between px-2 pb-3 pt-1">
           <span className="text-[11px] font-semibold uppercase tracking-wide text-inkTertiary">Notes</span>
           <div className="flex items-center gap-2 text-inkTertiary">
             <Search size={13} strokeWidth={1.8} />
             <PenSquare size={13} strokeWidth={1.8} />
           </div>
         </div>
-        <div className="app-scroll flex-1 overflow-y-auto px-2 pb-2">
+        <div className="app-scroll flex-1 overflow-y-auto px-1 pb-2">
           {NOTES.map((note) => {
             const isActive = note.id === activeId;
             return (
@@ -108,7 +108,7 @@ export default function NotesApp() {
       </aside>
 
       {/* Note body */}
-      <section className="app-scroll flex-1 overflow-y-auto px-7 py-6">
+      <section className="app-scroll flex-1 overflow-y-auto px-7 py-6 pl-4">
         <p className="mb-4 text-center text-[10px] text-inkFaint">{active.date}</p>
         {active.body}
       </section>
