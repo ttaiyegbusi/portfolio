@@ -5,27 +5,23 @@ import { useReducedMotion } from "framer-motion";
 
 export const badgeProfile = {
   name: "Temitope Aiyegbusi",
-  role: "Product Designer and AI Design Engineer",
-  handle: "@thearchdzim",
+  role: "Product Designer & AI Design Engineer",
   photo: "/images/temitope-aiyegbusi.jpg", // replace with your real photo
-  badgeLabel: "PORTFOLIO ID",
-  badgeNumber: "USER 001",
-  traits: ["Clarity Driven", "User First"],
 };
 
 /* --------------------------------- config --------------------------------- */
 
-const CARD_W = 248;
-const CARD_H = 348;
-const ROPE_REST = 96; // resting vertical distance anchor -> clip
-const STAGE_H = ROPE_REST + CARD_H + 120;
+const CARD_W = 230;
+const CARD_H = 300;
+const ROPE_REST = 92; // resting vertical distance anchor -> clip
+const CLIP_TO_CARD = 14; // gap from clip bottom to card top
+const STAGE_H = ROPE_REST + CLIP_TO_CARD + CARD_H + 110;
 
-// physics constants
-const STIFFNESS = 0.11;
-const DAMPING = 0.86;
-const ANG_STIFFNESS = 0.09;
-const ANG_DAMPING = 0.84;
-const GRAVITY = 0.4;
+// physics constants — tuned for fluid, lasting elasticity
+const STIFFNESS = 0.085;
+const DAMPING = 0.9;
+const ANG_STIFFNESS = 0.08;
+const ANG_DAMPING = 0.88;
 
 // drag bounds
 const MAX_X = 180;
@@ -36,12 +32,10 @@ export default function HangingIDBadge() {
   const reduceMotion = useReducedMotion();
 
   const stageRef = useRef<HTMLDivElement>(null);
-  const anchorRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const ropePathRef = useRef<SVGPathElement>(null);
   const clipRef = useRef<HTMLDivElement>(null);
 
-  // physics state (refs - no react re-render per frame)
   const phys = useRef({
     x: 0,
     y: 0,
@@ -52,16 +46,14 @@ export default function HangingIDBadge() {
     dragging: false,
     pointerX: 0,
     pointerY: 0,
-    lastPointerX: 0,
-    scale: 1,
   });
 
   const raf = useRef<number>();
 
   useEffect(() => {
     if (reduceMotion) {
-      // static render: straight rope, no animation
-      drawRope(0, 0);
+      drawRope(0, 0, 0);
+      if (cardRef.current) cardRef.current.style.transform = "translate(0px, 0px)";
       return;
     }
 
@@ -69,29 +61,28 @@ export default function HangingIDBadge() {
       const s = phys.current;
 
       if (s.dragging) {
-        // smoothing toward pointer (weighted lag)
         const targetX = clamp(s.pointerX, -MAX_X, MAX_X);
         const targetY = clamp(s.pointerY, MIN_Y, MAX_Y);
-        const nx = s.x + (targetX - s.x) * 0.35;
-        const ny = s.y + (targetY - s.y) * 0.35;
+        const nx = s.x + (targetX - s.x) * 0.4;
+        const ny = s.y + (targetY - s.y) * 0.4;
         s.vx = nx - s.x;
         s.vy = ny - s.y;
         s.x = nx;
         s.y = ny;
       } else {
-        // spring back to rest with gravity
+        // spring back — gravity only applies horizontally-neutral downward bias
         const forceX = (0 - s.x) * STIFFNESS;
-        const forceY = (0 - s.y) * STIFFNESS + GRAVITY;
+        const forceY = (0 - s.y) * STIFFNESS;
         s.vx = (s.vx + forceX) * DAMPING;
         s.vy = (s.vy + forceY) * DAMPING;
         s.x += s.vx;
         s.y += s.vy;
-
+        // gentle settle ONLY when truly at rest (very small threshold so motion stays fluid)
         if (
-          Math.abs(s.x) < 0.05 &&
-          Math.abs(s.y) < 0.05 &&
-          Math.abs(s.vx) < 0.05 &&
-          Math.abs(s.vy) < 0.05
+          Math.abs(s.x) < 0.01 &&
+          Math.abs(s.y) < 0.01 &&
+          Math.abs(s.vx) < 0.01 &&
+          Math.abs(s.vy) < 0.01
         ) {
           s.x = 0;
           s.y = 0;
@@ -101,20 +92,13 @@ export default function HangingIDBadge() {
       }
 
       // rotation from horizontal offset + velocity
-      const targetRot = clamp(s.x * 0.05 + s.vx * 0.4, -16, 16);
+      const targetRot = clamp(s.x * 0.06 + s.vx * 0.5, -14, 14);
       const angForce = (targetRot - s.rot) * ANG_STIFFNESS;
       s.avel = (s.avel + angForce) * ANG_DAMPING;
       s.rot += s.avel;
 
-      // tension-based scale
-      const dist = Math.hypot(s.x, s.y);
-      const tension = Math.min(dist / 220, 1);
-      const scaleX = 1 + (Math.abs(s.x) / MAX_X) * 0.015 + tension * 0.02;
-      const scaleY = 1 + (Math.max(s.y, 0) / MAX_Y) * 0.025 + tension * 0.02;
-
-      // apply transforms
       if (cardRef.current) {
-        cardRef.current.style.transform = `translate(${s.x}px, ${s.y}px) rotate(${s.rot}deg) scale(${scaleX}, ${scaleY})`;
+        cardRef.current.style.transform = `translate(${s.x}px, ${s.y}px) rotate(${s.rot}deg)`;
       }
       drawRope(s.x, s.y, s.rot);
 
@@ -128,27 +112,25 @@ export default function HangingIDBadge() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduceMotion]);
 
-  /* ----- draw the reactive lanyard curve ----- */
-  function drawRope(x: number, y: number, rot = 0) {
+  /* ----- reactive lanyard curve ----- */
+  function drawRope(x: number, y: number, rot: number) {
     const path = ropePathRef.current;
     const clip = clipRef.current;
     if (!path) return;
 
-    // anchor at top-center of stage (local svg coords)
     const ax = (stageRef.current?.clientWidth ?? 600) / 2;
-    const ay = 6;
+    const ay = 4;
 
-    // clip point = where the card top-center connector sits
+    // clip sits at end of rope, following the card
     const cx = ax + x;
     const cy = ay + ROPE_REST + y;
 
-    // control points create a natural curve / sag
-    const midX = ax + x * 0.5;
-    const sag = phys.current.dragging ? 6 : 14; // less sag when taut
-    const c1x = ax + x * 0.15;
-    const c1y = ay + (cy - ay) * 0.35 + sag;
-    const c2x = midX + x * 0.2;
-    const c2y = ay + (cy - ay) * 0.7;
+    // natural curve: control points lag the card for a soft S-curve
+    const sag = phys.current.dragging ? 4 : 10;
+    const c1x = ax + x * 0.1;
+    const c1y = ay + (cy - ay) * 0.4 + sag;
+    const c2x = ax + x * 0.55;
+    const c2y = ay + (cy - ay) * 0.75;
 
     path.setAttribute("d", `M ${ax} ${ay} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${cx} ${cy}`);
 
@@ -165,10 +147,9 @@ export default function HangingIDBadge() {
     const s = phys.current;
     s.dragging = true;
     const ax = stage.left + stage.width / 2;
-    const ay = stage.top + 6 + ROPE_REST;
+    const ay = stage.top + 4 + ROPE_REST;
     s.pointerX = e.clientX - ax;
     s.pointerY = e.clientY - ay;
-    s.lastPointerX = s.pointerX;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
     document.body.style.userSelect = "none";
   };
@@ -179,7 +160,7 @@ export default function HangingIDBadge() {
     const stage = stageRef.current?.getBoundingClientRect();
     if (!stage) return;
     const ax = stage.left + stage.width / 2;
-    const ay = stage.top + 6 + ROPE_REST;
+    const ay = stage.top + 4 + ROPE_REST;
     s.pointerX = e.clientX - ax;
     s.pointerY = e.clientY - ay;
   };
@@ -198,60 +179,36 @@ export default function HangingIDBadge() {
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
       const s = phys.current;
-      s.x = 0;
-      s.y = 0;
-      s.vx = 0;
-      s.vy = 0;
-      s.rot = 0;
-      s.avel = 0;
+      s.x = s.y = s.vx = s.vy = s.rot = s.avel = 0;
     }
   };
 
   return (
-    <div
-      ref={stageRef}
-      className="relative -mt-6 mb-2 w-full"
-      style={{ height: STAGE_H }}
-    >
+    <div ref={stageRef} className="relative -mt-6 mb-2 w-full" style={{ height: STAGE_H }}>
       {/* anchor dot */}
-      <div
-        ref={anchorRef}
-        className="absolute left-1/2 top-0 z-20 h-3 w-3 -translate-x-1/2 rounded-full bg-[#161616] shadow"
-      />
+      <div className="absolute left-1/2 top-0 z-20 h-3 w-3 -translate-x-1/2 rounded-full bg-[#161616] shadow" />
 
-      {/* reactive lanyard (SVG) */}
-      <svg
-        className="pointer-events-none absolute inset-0 h-full w-full"
-        style={{ zIndex: 5 }}
-      >
+      {/* reactive lanyard */}
+      <svg className="pointer-events-none absolute inset-0 h-full w-full" style={{ zIndex: 5 }}>
         <defs>
           <linearGradient id="rope-grad" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="#0d0d0d" />
-            <stop offset="0.5" stopColor="#222" />
+            <stop offset="0.5" stopColor="#2a2a2a" />
             <stop offset="1" stopColor="#0d0d0d" />
           </linearGradient>
         </defs>
-        <path
-          ref={ropePathRef}
-          d=""
-          fill="none"
-          stroke="url(#rope-grad)"
-          strokeWidth="20"
-          strokeLinecap="round"
-        />
+        <path ref={ropePathRef} d="" fill="none" stroke="url(#rope-grad)" strokeWidth="18" strokeLinecap="round" />
       </svg>
 
-      {/* clip + ring (positioned by JS at the rope end) */}
+      {/* clip + ring, positioned at rope end by JS */}
       <div
         ref={clipRef}
-        className="absolute left-0 top-0 z-10 -translate-x-1/2"
-        style={{ transform: `translate(50%, ${6 + ROPE_REST}px)` }}
+        className="absolute left-0 top-0 z-10"
+        style={{ transform: `translate(50%, ${4 + ROPE_REST}px)` }}
       >
-        <div className="flex flex-col items-center">
-          {/* metal ring */}
-          <div className="h-5 w-5 rounded-full border-[3.5px] border-[#a0a0a4] bg-transparent shadow-[0_1px_2px_rgba(0,0,0,0.3)]" />
-          {/* hook */}
-          <div className="-mt-2 h-5 w-3 rounded-b-full bg-gradient-to-b from-[#3a3a3a] to-[#0d0d0d] shadow" />
+        <div className="flex -translate-x-1/2 flex-col items-center">
+          <div className="h-5 w-5 rounded-full border-[3.5px] border-[#a0a0a4] shadow-[0_1px_2px_rgba(0,0,0,0.3)]" />
+          <div className="-mt-2 h-4 w-2.5 rounded-b-full bg-gradient-to-b from-[#3a3a3a] to-[#0d0d0d] shadow" />
         </div>
       </div>
 
@@ -260,7 +217,7 @@ export default function HangingIDBadge() {
         ref={cardRef}
         className="absolute left-1/2 z-[8] cursor-grab touch-none active:cursor-grabbing"
         style={{
-          top: 6 + ROPE_REST + 18,
+          top: 4 + ROPE_REST + CLIP_TO_CARD,
           marginLeft: -CARD_W / 2,
           width: CARD_W,
           willChange: "transform",
@@ -280,8 +237,6 @@ export default function HangingIDBadge() {
   );
 }
 
-/* --------------------------------- helpers -------------------------------- */
-
 function clamp(v: number, min: number, max: number) {
   return Math.max(min, Math.min(max, v));
 }
@@ -291,37 +246,17 @@ function clamp(v: number, min: number, max: number) {
 function BadgeCard() {
   return (
     <div
-      className="relative overflow-hidden rounded-[26px] border border-black/[0.06] bg-gradient-to-b from-white to-[#eef0f2] shadow-[0_22px_50px_rgba(0,0,0,0.22)]"
+      className="relative flex flex-col items-center overflow-hidden rounded-[26px] border border-black/[0.06] bg-gradient-to-b from-white to-[#eef0f2] shadow-[0_22px_50px_rgba(0,0,0,0.22)]"
       style={{ width: CARD_W, height: CARD_H }}
     >
-      {/* slot hole at top */}
+      {/* slot hole */}
       <div className="absolute left-1/2 top-3 h-1.5 w-12 -translate-x-1/2 rounded-full bg-black/15" />
 
       {/* glossy highlight */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/60 to-transparent" />
 
-      {/* background typography */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col justify-center opacity-[0.07]">
-        {["PRODUCT", "DESIGNER", "AI DESIGN", "ENGINEER"].map((w, i) => (
-          <span
-            key={i}
-            className="text-center text-[30px] font-extrabold italic leading-[0.92] tracking-tight text-black"
-          >
-            {w}
-          </span>
-        ))}
-      </div>
-
-      {/* top label */}
-      <div className="absolute left-4 top-7 flex items-center gap-1.5">
-        <span className="h-2 w-2 rounded-full bg-black" />
-        <span className="text-[8px] font-semibold uppercase tracking-wider text-inkTertiary">
-          {badgeProfile.badgeLabel}
-        </span>
-      </div>
-
       {/* photo */}
-      <div className="absolute left-1/2 top-[78px] h-[120px] w-[120px] -translate-x-1/2 overflow-hidden rounded-full border-2 border-white bg-gradient-to-br from-slate-200 to-slate-300 shadow-md">
+      <div className="mt-[52px] h-[120px] w-[120px] overflow-hidden rounded-full border-2 border-white bg-gradient-to-br from-slate-200 to-slate-300 shadow-md">
         <img
           src={badgeProfile.photo}
           alt={badgeProfile.name}
@@ -330,46 +265,16 @@ function BadgeCard() {
           draggable={false}
           className="h-full w-full object-cover"
           onError={(e) => {
-            const el = e.currentTarget as HTMLImageElement;
-            el.style.display = "none";
+            (e.currentTarget as HTMLImageElement).style.display = "none";
           }}
         />
       </div>
 
-      {/* trait stickers */}
-      <div className="absolute left-3 top-[150px] rotate-[-8deg]">
-        <Sticker label={badgeProfile.traits[0]} />
-      </div>
-      <div className="absolute right-3 top-[190px] rotate-[8deg]">
-        <Sticker label={badgeProfile.traits[1]} />
-      </div>
-
-      {/* name + role */}
-      <div className="absolute inset-x-0 bottom-6 px-4 text-center">
+      {/* name + designation */}
+      <div className="mt-6 px-5 text-center">
         <p className="text-[16px] font-bold text-inkStrong">{badgeProfile.name}</p>
-        <p className="mt-1 text-[10.5px] leading-tight text-inkTertiary">{badgeProfile.role}</p>
-        <p className="mt-1.5 text-[8.5px] font-medium tracking-wide text-inkMuted">
-          {badgeProfile.handle} · {badgeProfile.badgeNumber}
-        </p>
+        <p className="mt-1.5 text-[11px] leading-snug text-inkTertiary">{badgeProfile.role}</p>
       </div>
-    </div>
-  );
-}
-
-function Sticker({ label }: { label: string }) {
-  return (
-    <div className="relative flex h-12 w-12 items-center justify-center">
-      <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
-        <path
-          d="M50 2l9 13 15-6 3 16 16 3-6 15 13 9-13 9 6 15-16 3-3 16-15-6-9 13-9-13-15 6-3-16-16-3 6-15-13-9 13-9-6-15 16-3 3-16 15 6z"
-          fill="#fff"
-          stroke="#7c3aed"
-          strokeWidth="2.5"
-        />
-      </svg>
-      <span className="relative px-1 text-center text-[7px] font-bold uppercase leading-tight text-[#7c3aed]">
-        {label}
-      </span>
     </div>
   );
 }
