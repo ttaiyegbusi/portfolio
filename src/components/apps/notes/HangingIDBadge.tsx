@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useLayoutEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
 
 /* ----------------------------- editable config ---------------------------- */
@@ -63,6 +63,14 @@ function HangingIDBadgeBase() {
   });
 
   const raf = useRef<number>();
+  const lastD = useRef("M 280 4 C 280 50, 280 73, 280 96");
+
+  /* re-apply the rope path after every commit as a safety net against
+     React reconciliation wiping the imperatively-set `d` attribute */
+  useLayoutEffect(() => {
+    if (ropePathRef.current) ropePathRef.current.setAttribute("d", lastD.current);
+    if (ropeHiRef.current) ropeHiRef.current.setAttribute("d", lastD.current);
+  });
 
   /* ---- keep width measured & valid via ResizeObserver ---- */
   useEffect(() => {
@@ -176,6 +184,7 @@ function HangingIDBadgeBase() {
     )} ${safeNumber(c2y, ay)}, ${cx} ${cy}`;
 
     path.setAttribute("d", d);
+    lastD.current = d;
     if (hi) hi.setAttribute("d", d);
 
     if (clip) {
@@ -232,10 +241,10 @@ function HangingIDBadgeBase() {
       {/* anchor dot */}
       <div className="absolute left-1/2 top-0 z-20 h-3 w-3 -translate-x-1/2 rounded-full bg-[#161616] shadow" />
 
-      {/* reactive lanyard (overflow visible so it never clips) */}
+      {/* reactive lanyard (above the card so it can never be covered, below the clip) */}
       <svg
         className="pointer-events-none absolute inset-0 h-full w-full"
-        style={{ zIndex: 5, overflow: "visible" }}
+        style={{ zIndex: 9, overflow: "visible" }}
       >
         <defs>
           <linearGradient id="rope-grad" x1="0" y1="0" x2="1" y2="0">
@@ -269,7 +278,7 @@ function HangingIDBadgeBase() {
       {/* clip + ring positioned at rope end */}
       <div
         ref={clipRef}
-        className="absolute left-0 top-0 z-10"
+        className="absolute left-0 top-0 z-[11]"
         style={{ transform: `translate(${280}px, ${4 + ROPE_REST}px)` }}
       >
         <div className="flex -translate-x-1/2 flex-col items-center">
