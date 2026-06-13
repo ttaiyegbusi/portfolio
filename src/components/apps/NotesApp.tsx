@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { PenSquare, Search } from "lucide-react";
+import { PanelLeft, PanelLeftOpen, Search, X } from "lucide-react";
 import { mediumArticles } from "../../data/mediumArticles";
 
 /* ----------------------------- personal notes ---------------------------- */
@@ -146,70 +146,165 @@ function ArticleBody({ articleId }: { articleId: string }) {
 /* -------------------------------- the app -------------------------------- */
 
 export default function NotesApp() {
+  const reduceMotion = useReducedMotion();
   const [activeId, setActiveId] = useState<string>(NOTES[0].id);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
 
   const activeNote = NOTES.find((n) => n.id === activeId);
   const isArticle = !activeNote;
 
+  const q = query.trim().toLowerCase();
+  const filteredNotes = q
+    ? NOTES.filter((n) => n.title.toLowerCase().includes(q) || n.preview.toLowerCase().includes(q))
+    : NOTES;
+  const filteredArticles = q
+    ? mediumArticles.filter(
+        (a) => a.title.toLowerCase().includes(q) || a.subtitle.toLowerCase().includes(q),
+      )
+    : mediumArticles;
+  const noResults = q && filteredNotes.length === 0 && filteredArticles.length === 0;
+
+  const closeSearch = () => {
+    setSearchOpen(false);
+    setQuery("");
+  };
+
+  const spring = { type: "spring", stiffness: 360, damping: 34 } as const;
+
   return (
-    <div className="flex h-full bg-white/50 p-4">
+    <div className="relative flex h-full gap-4 bg-white/50 p-4">
       {/* Floating sidebar */}
-      <aside className="flex w-[230px] shrink-0 flex-col rounded-lg bg-white/80 backdrop-blur-sm shadow-sm border border-white/40 p-3">
-        <div className="flex items-center justify-between px-2 pb-3 pt-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wide text-inkTertiary">Notes</span>
-          <div className="flex items-center gap-2 text-inkTertiary">
-            <Search size={13} strokeWidth={1.8} />
-            <PenSquare size={13} strokeWidth={1.8} />
-          </div>
-        </div>
+      <AnimatePresence initial={false}>
+        {sidebarOpen && (
+          <motion.aside
+            key="sidebar"
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -16, width: 0 }}
+            animate={reduceMotion ? { opacity: 1 } : { opacity: 1, x: 0, width: 230 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -16, width: 0 }}
+            transition={reduceMotion ? { duration: 0.15 } : spring}
+            className="flex shrink-0 flex-col overflow-hidden rounded-lg border border-white/40 bg-white/80 p-3 shadow-sm backdrop-blur-sm"
+          >
+            {/* Header row */}
+            <div className="flex items-center justify-between px-2 pb-3 pt-1">
+              {!searchOpen && (
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-inkTertiary">Notes</span>
+              )}
 
-        <div className="app-scroll flex-1 overflow-y-auto px-1 pb-2">
-          {/* Personal notes */}
-          {NOTES.map((note) => {
-            const isActive = note.id === activeId;
-            return (
-              <button
-                key={note.id}
-                onClick={() => setActiveId(note.id)}
-                className={`mb-1 w-full rounded-md px-2.5 py-2 text-left transition-colors ${
-                  isActive ? "bg-[#FFE067]/45" : "hover:bg-black/[0.04]"
-                }`}
-              >
-                <p className="truncate text-[12px] font-semibold text-inkStrong">{note.title}</p>
-                <p className="mt-0.5 truncate text-[11px] text-inkTertiary">
-                  <span className="mr-1.5 text-inkMuted">{note.date}</span>
-                  {note.preview}
-                </p>
-              </button>
-            );
-          })}
+              {searchOpen ? (
+                <div className="flex w-full items-center gap-1.5 rounded-md bg-black/[0.05] px-2 py-1">
+                  <Search size={12} strokeWidth={1.8} className="shrink-0 text-inkMuted" />
+                  <input
+                    autoFocus
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === "Escape" && closeSearch()}
+                    placeholder="Search"
+                    aria-label="Search notes and articles"
+                    className="w-full bg-transparent text-[12px] text-inkStrong placeholder:text-inkMuted focus:outline-none"
+                  />
+                  <button
+                    onClick={closeSearch}
+                    aria-label="Cancel search"
+                    className="shrink-0 rounded p-0.5 text-inkMuted transition-colors hover:bg-black/[0.06] hover:text-inkSecondary"
+                  >
+                    <X size={12} strokeWidth={2} />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 text-inkTertiary">
+                  <button
+                    onClick={() => setSearchOpen(true)}
+                    aria-label="Search"
+                    className="rounded p-1 transition-colors hover:bg-black/[0.05] hover:text-inkSecondary"
+                  >
+                    <Search size={13} strokeWidth={1.8} />
+                  </button>
+                  <button
+                    onClick={() => setSidebarOpen(false)}
+                    aria-label="Collapse sidebar"
+                    className="rounded p-1 transition-colors hover:bg-black/[0.05] hover:text-inkSecondary"
+                  >
+                    <PanelLeft size={13} strokeWidth={1.8} />
+                  </button>
+                </div>
+              )}
+            </div>
 
-          {/* Divider */}
-          <div className="my-2 px-2">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-inkMuted">Writing</p>
-          </div>
+            <div className="app-scroll flex-1 overflow-y-auto px-1 pb-2">
+              {noResults && (
+                <p className="px-2.5 py-3 text-[12px] text-inkMuted">No results for "{query}"</p>
+              )}
 
-          {/* Articles */}
-          {mediumArticles.map((article) => {
-            const isActive = article.id === activeId;
-            return (
-              <button
-                key={article.id}
-                onClick={() => setActiveId(article.id)}
-                className={`mb-1 w-full rounded-md px-2.5 py-2 text-left transition-colors ${
-                  isActive ? "bg-[#FFE067]/45" : "hover:bg-black/[0.04]"
-                }`}
-              >
-                <p className="truncate text-[12px] font-semibold text-inkStrong">{article.title}</p>
-                <p className="mt-0.5 truncate text-[11px] text-inkTertiary">{article.subtitle}</p>
-              </button>
-            );
-          })}
-        </div>
-      </aside>
+              {/* Personal notes */}
+              {filteredNotes.map((note) => {
+                const isActive = note.id === activeId;
+                return (
+                  <button
+                    key={note.id}
+                    onClick={() => setActiveId(note.id)}
+                    className={`mb-1 w-full rounded-md px-2.5 py-2 text-left transition-colors ${
+                      isActive ? "bg-[#FFE067]/45" : "hover:bg-black/[0.04]"
+                    }`}
+                  >
+                    <p className="truncate text-[12px] font-semibold text-inkStrong">{note.title}</p>
+                    <p className="mt-0.5 truncate text-[11px] text-inkTertiary">
+                      <span className="mr-1.5 text-inkMuted">{note.date}</span>
+                      {note.preview}
+                    </p>
+                  </button>
+                );
+              })}
+
+              {/* Divider */}
+              {filteredArticles.length > 0 && (
+                <div className="my-2 px-2">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-inkMuted">Writing</p>
+                </div>
+              )}
+
+              {/* Articles */}
+              {filteredArticles.map((article) => {
+                const isActive = article.id === activeId;
+                return (
+                  <button
+                    key={article.id}
+                    onClick={() => setActiveId(article.id)}
+                    className={`mb-1 w-full rounded-md px-2.5 py-2 text-left transition-colors ${
+                      isActive ? "bg-[#FFE067]/45" : "hover:bg-black/[0.04]"
+                    }`}
+                  >
+                    <p className="truncate text-[12px] font-semibold text-inkStrong">{article.title}</p>
+                    <p className="mt-0.5 truncate text-[11px] text-inkTertiary">{article.subtitle}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
+
+      {/* Expand handle when collapsed */}
+      <AnimatePresence>
+        {!sidebarOpen && (
+          <motion.button
+            key="expand"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={reduceMotion ? { duration: 0.15 } : spring}
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Expand sidebar"
+            className="absolute left-6 top-7 z-10 rounded-md border border-white/50 bg-white/80 p-1.5 text-inkSecondary shadow-sm backdrop-blur-sm transition-transform hover:scale-105"
+          >
+            <PanelLeftOpen size={14} strokeWidth={1.8} />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* Reading area */}
-      <section className="app-scroll flex-1 overflow-y-auto rounded-lg bg-white px-7 py-6">
+      <section className="app-scroll flex-1 overflow-y-auto rounded-lg bg-white px-8 py-6">
         <AnimatePresence mode="wait">
           {isArticle ? (
             <ArticleBody key={activeId} articleId={activeId} />
