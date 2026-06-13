@@ -91,12 +91,6 @@ function ArticleBody({ articleId }: { articleId: string }) {
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className="mx-auto max-w-[640px]"
     >
-      {/* Cover */}
-      <div
-        className="mb-6 h-44 w-full rounded-xl bg-cover bg-center"
-        style={{ backgroundImage: `url(${article.coverImage}), linear-gradient(135deg, #e0e7ff, #f0e7ff)` }}
-      />
-
       {/* Meta */}
       <div className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-inkMuted">
         <span className="font-semibold uppercase tracking-wide text-inkTertiary">{article.source}</span>
@@ -121,14 +115,16 @@ function ArticleBody({ articleId }: { articleId: string }) {
 
       {/* Excerpt with fade overlay */}
       <div className="relative mt-6">
-        <div className="max-h-[180px] overflow-hidden">
+        <div className="max-h-[340px] overflow-hidden">
           <p className="text-[16px] leading-[1.8] text-inkSecondary">{article.excerpt}</p>
-          <p className="mt-4 text-[16px] leading-[1.8] text-inkSecondary">
-            The full piece continues on Medium, where I go deeper into the reasoning, examples, and takeaways.
-          </p>
+          {article.bodyPreview?.map((para, i) => (
+            <p key={i} className="mt-4 text-[16px] leading-[1.8] text-inkSecondary">
+              {para}
+            </p>
+          ))}
         </div>
-        {/* soft white fade */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-white" />
+        {/* soft fade — matches the reading area background */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-white/60 to-white" />
       </div>
 
       {/* CTA */}
@@ -139,7 +135,7 @@ function ArticleBody({ articleId }: { articleId: string }) {
         whileHover={reduceMotion ? {} : { y: -2 }}
         whileTap={reduceMotion ? {} : { scale: 0.98 }}
         aria-label={`Continue reading "${article.title}" on Medium (opens in a new tab)`}
-        className="mt-2 inline-flex w-full items-center justify-center rounded-lg bg-inkStrong px-4 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inkStrong/40"
+        className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-inkStrong px-4 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inkStrong/40"
       >
         Continue reading on Medium
       </motion.a>
@@ -213,7 +209,7 @@ export default function NotesApp() {
       </aside>
 
       {/* Reading area */}
-      <section className="app-scroll flex-1 overflow-y-auto px-7 py-6 pl-6">
+      <section className="app-scroll flex-1 overflow-y-auto rounded-lg bg-white px-7 py-6">
         <AnimatePresence mode="wait">
           {isArticle ? (
             <ArticleBody key={activeId} articleId={activeId} />
