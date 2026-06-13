@@ -60,6 +60,7 @@ function DockIcon({ app }: { app: AppDefinition }) {
 }
 
 export default function Dock() {
+  const { windows } = useWindowManager();
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-3.5 z-[9999] flex justify-center">
       <motion.div
@@ -71,9 +72,20 @@ export default function Dock() {
         {/* sheen sweep */}
         <span className="dock-sheen absolute inset-0 rounded-[21px]" />
 
-        {APP_LIST.map((app) => (
-          <DockIcon key={app.id} app={app} />
-        ))}
+        <AnimatePresence initial={false} mode="popLayout">
+          {APP_LIST.filter((app) => app.id !== "imagePreview" || windows.imagePreview.open).map((app) => (
+            <motion.div
+              key={app.id}
+              layout
+              initial={{ opacity: 0, scale: 0.6, width: 0 }}
+              animate={{ opacity: 1, scale: 1, width: "auto" }}
+              exit={{ opacity: 0, scale: 0.6, width: 0 }}
+              transition={{ type: "spring", stiffness: 420, damping: 32 }}
+            >
+              <DockIcon app={app} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
 
         {/* divider + trash */}
         <span className="mx-0.5 h-[38px] w-px bg-gradient-to-b from-transparent via-black/[0.16] to-transparent" />
