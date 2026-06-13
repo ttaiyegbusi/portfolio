@@ -22,7 +22,6 @@ const NOTES: Note[] = [
     preview: "Hi, I'm Te...",
     body: (
       <div className="space-y-5 text-[15px] leading-[1.7] text-inkSecondary">
-        <HangingIDBadge />
         <p>
           Hi, I'm <span className="font-semibold text-inkStrong">Temitope Aiyegbusi</span> — a product designer based in
           Lagos, Nigeria. I'm passionate about transforming ideas into clean, functional, and visually captivating
@@ -306,10 +305,22 @@ export default function NotesApp() {
       </AnimatePresence>
 
       {/* Reading area */}
-      <section className="app-scroll flex-1 overflow-y-auto rounded-lg bg-white px-8 py-6">
+      <section className="app-scroll relative flex-1 overflow-y-auto rounded-lg bg-white px-8 py-6">
         <AnimatePresence mode="wait">
           {isArticle ? (
             <ArticleBody key={activeId} articleId={activeId} />
+          ) : activeNote!.id === "about-me" ? (
+            <motion.div
+              key="about-me"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+            >
+              {/* Badge hangs from the very top of the content area */}
+              <HangingIDBadge />
+              <h1 className="mb-5 text-[22px] font-bold text-inkStrong">{activeNote!.title}</h1>
+              {activeNote!.body}
+            </motion.div>
           ) : (
             <motion.div
               key={activeNote!.id}
