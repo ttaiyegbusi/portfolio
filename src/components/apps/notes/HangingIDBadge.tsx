@@ -17,14 +17,14 @@ const ROPE_REST = 92;
 const CLIP_TO_CARD = 14;
 const STAGE_H = ROPE_REST + CLIP_TO_CARD + CARD_H + 110;
 
-const STIFFNESS = 0.085;
-const DAMPING = 0.9;
-const ANG_STIFFNESS = 0.08;
-const ANG_DAMPING = 0.88;
+const STIFFNESS = 0.072;
+const DAMPING = 0.92;
+const ANG_STIFFNESS = 0.1;
+const ANG_DAMPING = 0.86;
 
 const MAX_X = 180;
-const MIN_Y = -30;
-const MAX_Y = 220;
+const MIN_Y = -40;
+const MAX_Y = 240;
 
 /* -------------------------------- helpers --------------------------------- */
 
@@ -33,6 +33,13 @@ function safeNumber(value: number, fallback = 0) {
 }
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
+}
+// elastic resistance past the soft bounds — lets the card keep stretching
+// instead of hitting a hard wall (the "magnet" feeling)
+function rubberBand(value: number, min: number, max: number) {
+  if (value > max) return max + (value - max) * 0.4;
+  if (value < min) return min + (value - min) * 0.4;
+  return value;
 }
 
 /* -------------------------------- component ------------------------------- */
@@ -106,10 +113,13 @@ function HangingIDBadgeBase() {
       const s = phys.current;
 
       if (s.dragging) {
-        const targetX = clamp(s.pointerX, -MAX_X, MAX_X);
-        const targetY = clamp(s.pointerY, MIN_Y, MAX_Y);
-        const nx = s.x + (targetX - s.x) * 0.4;
-        const ny = s.y + (targetY - s.y) * 0.4;
+        // rubber-band so it can stretch past the bounds with resistance
+        const targetX = rubberBand(s.pointerX, -MAX_X, MAX_X);
+        const targetY = rubberBand(s.pointerY, MIN_Y, MAX_Y);
+        // responsive follow (higher = tracks pointer more closely, less "magnetic")
+        const follow = 0.6;
+        const nx = s.x + (targetX - s.x) * follow;
+        const ny = s.y + (targetY - s.y) * follow;
         s.vx = nx - s.x;
         s.vy = ny - s.y;
         s.x = nx;
@@ -131,7 +141,8 @@ function HangingIDBadgeBase() {
         }
       }
 
-      const targetRot = clamp(s.x * 0.06 + s.vx * 0.5, -14, 14);
+      // rotation driven more by velocity for a livelier, connected feel
+      const targetRot = clamp(s.x * 0.06 + s.vx * 0.9, -18, 18);
       const angForce = (targetRot - s.rot) * ANG_STIFFNESS;
       s.avel = (s.avel + angForce) * ANG_DAMPING;
       s.rot += s.avel;
