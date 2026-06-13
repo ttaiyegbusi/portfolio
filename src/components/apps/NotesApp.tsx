@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { PanelLeft, PanelLeftOpen, Search, X } from "lucide-react";
 import { mediumArticles } from "../../data/mediumArticles";
+import HangingIDBadge from "./notes/HangingIDBadge";
 
 /* ----------------------------- personal notes ---------------------------- */
 
@@ -21,6 +22,7 @@ const NOTES: Note[] = [
     preview: "Hi, I'm Te...",
     body: (
       <div className="space-y-5 text-[15px] leading-[1.7] text-inkSecondary">
+        <HangingIDBadge />
         <p>
           Hi, I'm <span className="font-semibold text-inkStrong">Temitope Aiyegbusi</span> — a product designer based in
           Lagos, Nigeria. I'm passionate about transforming ideas into clean, functional, and visually captivating
