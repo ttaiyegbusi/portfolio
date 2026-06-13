@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
 
 /* ----------------------------- editable config ---------------------------- */
@@ -37,7 +37,7 @@ function clamp(value: number, min: number, max: number) {
 
 /* -------------------------------- component ------------------------------- */
 
-export default function HangingIDBadge() {
+function HangingIDBadgeBase() {
   const reduceMotion = useReducedMotion();
 
   const stageRef = useRef<HTMLDivElement>(null);
@@ -247,7 +247,7 @@ export default function HangingIDBadge() {
         {/* main strap */}
         <path
           ref={ropePathRef}
-          d=""
+          d="M 280 4 C 280 40, 280 70, 280 96"
           fill="none"
           stroke="url(#rope-grad)"
           strokeWidth="18"
@@ -257,7 +257,7 @@ export default function HangingIDBadge() {
         {/* subtle highlight on top for depth */}
         <path
           ref={ropeHiRef}
-          d=""
+          d="M 280 4 C 280 40, 280 70, 280 96"
           fill="none"
           stroke="rgba(255,255,255,0.12)"
           strokeWidth="6"
@@ -335,3 +335,8 @@ function BadgeCard() {
     </div>
   );
 }
+
+/* Memoized so parent re-renders (e.g. hover, search typing) never reconcile
+   the imperatively-set SVG path `d` back to its initial value. */
+const HangingIDBadge = memo(HangingIDBadgeBase);
+export default HangingIDBadge;
