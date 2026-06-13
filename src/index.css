@@ -171,21 +171,13 @@ body {
 
 /* thin macOS-ish scrollbars inside app windows */
 .app-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 .app-scroll::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-.app-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.16);
-  border-radius: 99px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-.app-scroll::-webkit-scrollbar-track {
-  background: transparent;
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

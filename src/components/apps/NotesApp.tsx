@@ -290,10 +290,10 @@ export default function NotesApp() {
         {!sidebarOpen && (
           <motion.button
             key="expand"
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -10 }}
-            transition={reduceMotion ? { duration: 0.15 } : spring}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             onClick={() => setSidebarOpen(true)}
             aria-label="Expand sidebar"
             className="absolute left-6 top-7 z-10 rounded-md border border-white/50 bg-white/80 p-1.5 text-inkSecondary shadow-sm backdrop-blur-sm transition-transform hover:scale-105"
