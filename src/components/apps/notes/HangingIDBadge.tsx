@@ -246,19 +246,12 @@ function HangingIDBadgeBase() {
         className="pointer-events-none absolute inset-0 h-full w-full"
         style={{ zIndex: 9, overflow: "visible" }}
       >
-        <defs>
-          <linearGradient id="rope-grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#0d0d0d" />
-            <stop offset="0.5" stopColor="#2a2a2a" />
-            <stop offset="1" stopColor="#0d0d0d" />
-          </linearGradient>
-        </defs>
-        {/* main strap */}
+        {/* main strap — solid color (no fragile gradient id reference) */}
         <path
           ref={ropePathRef}
-          d="M 280 4 C 280 40, 280 70, 280 96"
+          d="M 280 4 C 280 50, 280 73, 280 96"
           fill="none"
-          stroke="url(#rope-grad)"
+          stroke="#161616"
           strokeWidth="18"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -266,9 +259,9 @@ function HangingIDBadgeBase() {
         {/* subtle highlight on top for depth */}
         <path
           ref={ropeHiRef}
-          d="M 280 4 C 280 40, 280 70, 280 96"
+          d="M 280 4 C 280 50, 280 73, 280 96"
           fill="none"
-          stroke="rgba(255,255,255,0.12)"
+          stroke="rgba(255,255,255,0.14)"
           strokeWidth="6"
           strokeLinecap="round"
           strokeLinejoin="round"
