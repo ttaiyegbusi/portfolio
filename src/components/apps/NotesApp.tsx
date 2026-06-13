@@ -1,117 +1,43 @@
 import { useState } from "react";
-import { PenSquare, Search } from "lucide-react";
-
-const NOTES = [
-  {
-    id: "about",
-    title: "About Me",
-    date: "Today, 9:41 AM",
-    preview: "Hi, I'm Temitope — a product designer based in Lagos…",
-    body: (
-      <>
-        <h1 className="text-[17px] font-semibold text-inkStrong">About Me</h1>
-        <p className="mt-3 text-[13px] leading-6 text-inkSecondary">
-          Hi, I'm <span className="font-medium text-inkStrong">Temitope Aiyegbusi</span> — a product designer based in
-          Lagos, Nigeria. I'm passionate about transforming ideas into clean, functional, and visually captivating
-          products.
-        </p>
-        <p className="mt-3 text-[13px] leading-6 text-inkSecondary">
-          I care about the small details: spacing that breathes, type that reads, and interactions that feel inevitable
-          rather than decorative. This portfolio — a little macOS desktop — is proof of that.
-        </p>
-        <p className="mt-3 text-[13px] leading-6 text-inkSecondary">
-          Reach me anytime at <span className="text-inkStrong">aiyegbusitope@gmail.com</span>.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: "skills",
-    title: "Skills & Tools",
-    date: "Yesterday",
-    preview: "Product design, design systems, prototyping…",
-    body: (
-      <>
-        <h1 className="text-[17px] font-semibold text-inkStrong">Skills &amp; Tools</h1>
-        <div className="mt-4 space-y-4 text-[13px] leading-6 text-inkSecondary">
-          <div>
-            <p className="font-medium text-inkStrong">Design</p>
-            <p>Product design · Design systems · Interaction design · Prototyping · Visual identity</p>
-          </div>
-          <div>
-            <p className="font-medium text-inkStrong">Tools</p>
-            <p>Figma · FigJam · Framer · Notion · After Effects</p>
-          </div>
-          <div>
-            <p className="font-medium text-inkStrong">Handoff &amp; collaboration</p>
-            <p>Tokens, specs and redlines · Component documentation · Working closely with engineers</p>
-          </div>
-        </div>
-      </>
-    ),
-  },
-  {
-    id: "principles",
-    title: "Design Principles",
-    date: "Monday",
-    preview: "Quiet, airy, minimal, soft, premium…",
-    body: (
-      <>
-        <h1 className="text-[17px] font-semibold text-inkStrong">Design Principles</h1>
-        <ol className="mt-4 list-decimal space-y-2 pl-5 text-[13px] leading-6 text-inkSecondary">
-          <li>Intentionality first — every element earns its place.</li>
-          <li>Low contrast, high clarity. Hierarchy through weight and space, not noise.</li>
-          <li>Motion should explain, never perform.</li>
-          <li>Borders over shadows; depth from translucency and blur.</li>
-          <li>Ship the details. Polish is a feature.</li>
-        </ol>
-      </>
-    ),
-  },
-];
+import { AnimatePresence } from "framer-motion";
+import ArticleListItem from "./notes/ArticleListItem";
+import ArticlePreview from "./notes/ArticlePreview";
+import { mediumArticles } from "../../data/mediumArticles";
 
 export default function NotesApp() {
-  const [activeId, setActiveId] = useState("about");
-  const active = NOTES.find((n) => n.id === activeId) ?? NOTES[0];
+  const [selectedArticleId, setSelectedArticleId] = useState(mediumArticles[0]?.id);
+
+  const selectedArticle = mediumArticles.find((a) => a.id === selectedArticleId);
 
   return (
-    <div className="flex h-full bg-white/50 p-4">
+    <div className="flex h-full w-full bg-white">
       {/* Floating sidebar */}
-      <aside className="flex w-[200px] shrink-0 flex-col rounded-lg bg-white/80 backdrop-blur-sm shadow-sm border border-white/40 p-3">
-        <div className="flex items-center justify-between px-2 pb-3 pt-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wide text-inkTertiary">Notes</span>
-          <div className="flex items-center gap-2 text-inkTertiary">
-            <Search size={13} strokeWidth={1.8} />
-            <PenSquare size={13} strokeWidth={1.8} />
-          </div>
-        </div>
-        <div className="app-scroll flex-1 overflow-y-auto px-1 pb-2">
-          {NOTES.map((note) => {
-            const isActive = note.id === activeId;
-            return (
-              <button
-                key={note.id}
-                onClick={() => setActiveId(note.id)}
-                className={`mb-1 w-full rounded-md px-2.5 py-2 text-left transition-colors ${
-                  isActive ? "bg-[#FFE067]/45" : "hover:bg-black/[0.04]"
-                }`}
-              >
-                <p className="truncate text-[12px] font-semibold text-inkStrong">{note.title}</p>
-                <p className="mt-0.5 truncate text-[11px] text-inkTertiary">
-                  <span className="mr-1.5 text-inkMuted">{note.date}</span>
-                  {note.preview}
-                </p>
-              </button>
-            );
-          })}
+      <aside className="flex w-[220px] shrink-0 flex-col rounded-lg bg-white/80 backdrop-blur-sm shadow-sm border border-white/40 p-3 m-4 h-fit max-h-[calc(100%-2rem)] overflow-y-auto">
+        <h3 className="mb-3 text-[13px] font-semibold text-inkStrong px-1">Articles</h3>
+        <div className="space-y-1">
+          {mediumArticles.map((article) => (
+            <ArticleListItem
+              key={article.id}
+              article={article}
+              isSelected={selectedArticleId === article.id}
+              onClick={() => setSelectedArticleId(article.id)}
+            />
+          ))}
         </div>
       </aside>
 
-      {/* Note body */}
-      <section className="app-scroll flex-1 overflow-y-auto px-7 py-6 pl-4">
-        <p className="mb-4 text-center text-[10px] text-inkFaint">{active.date}</p>
-        {active.body}
-      </section>
+      {/* Main reading area */}
+      <div className="flex-1 overflow-y-auto p-8">
+        <AnimatePresence mode="wait">
+          {selectedArticle ? (
+            <ArticlePreview key={selectedArticle.id} article={selectedArticle} />
+          ) : (
+            <div className="flex items-center justify-center h-full text-inkMuted">
+              No article selected
+            </div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
