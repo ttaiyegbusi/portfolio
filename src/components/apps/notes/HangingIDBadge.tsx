@@ -321,7 +321,7 @@ function HangingIDBadgeBase() {
 function BadgeCard() {
   return (
     <div
-      className="relative flex flex-col items-center overflow-hidden rounded-[26px] border border-black/[0.06] bg-gradient-to-b from-white to-[#eef0f2] shadow-[0_22px_50px_rgba(0,0,0,0.22)]"
+      className="relative flex flex-col items-center overflow-hidden rounded-[26px] border border-black/[0.05] bg-gradient-to-b from-white to-[#eef0f2] shadow-[0_2px_6px_rgba(0,0,0,0.04),0_12px_28px_rgba(0,0,0,0.07)]"
       style={{ width: CARD_W, height: CARD_H }}
     >
       <div className="absolute left-1/2 top-3 h-1.5 w-12 -translate-x-1/2 rounded-full bg-black/15" />
