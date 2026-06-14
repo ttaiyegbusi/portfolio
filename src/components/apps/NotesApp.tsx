@@ -116,7 +116,7 @@ function ArticleBody({ articleId }: { articleId: string }) {
 
       {/* Excerpt with fade overlay */}
       <div className="relative mt-6">
-        <div className="max-h-[340px] overflow-hidden">
+        <div className="max-h-[460px] overflow-hidden">
           <p className="text-[16px] leading-[1.8] text-inkSecondary">{article.excerpt}</p>
           {article.bodyPreview?.map((para, i) => (
             <p key={i} className="mt-4 text-[16px] leading-[1.8] text-inkSecondary">
@@ -260,7 +260,7 @@ export default function NotesApp() {
 
               {/* Divider */}
               {filteredArticles.length > 0 && (
-                <div className="my-2 px-2">
+                <div className="mb-2 mt-7 border-t border-black/[0.06] px-2 pt-4">
                   <p className="text-[10px] font-semibold uppercase tracking-wide text-inkMuted">Writing</p>
                 </div>
               )}
