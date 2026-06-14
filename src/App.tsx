@@ -4,14 +4,15 @@ import { WindowManagerProvider } from "./context/WindowManager";
 import { BackgroundProvider } from "./context/BackgroundProvider";
 import { PreviewProvider } from "./context/PreviewContext";
 import { RevealContext } from "./context/RevealContext";
+import { useDeviceType } from "./hooks/useDeviceType";
 import Desktop from "./components/Desktop";
+import MobileShell from "./components/mobile/MobileShell";
 import Preloader from "./components/preloader/Preloader";
 
 export default function App() {
-  // Flipped true once the preloader has fully animated out. The desktop
-  // background is always mounted underneath; the windows/dock/topnav wait
-  // for this flag so their entrance animations play visibly on reveal.
+  // Flipped true once the preloader has fully animated out.
   const [revealed, setRevealed] = useState(false);
+  const device = useDeviceType();
 
   return (
     <MotionConfig reducedMotion="user">
@@ -19,7 +20,7 @@ export default function App() {
         <PreviewProvider>
           <WindowManagerProvider>
             <RevealContext.Provider value={revealed}>
-              <Desktop />
+              {device === "phone" ? <MobileShell /> : <Desktop />}
             </RevealContext.Provider>
           </WindowManagerProvider>
         </PreviewProvider>
