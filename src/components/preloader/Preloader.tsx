@@ -42,13 +42,23 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           style={{ touchAction: "none" }}
         >
           <motion.div
-            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 6 }}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 8 }}
             animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 0 }}
-            transition={{
-              duration: reduceMotion ? 0.3 : 0.55,
-              ease: [0.32, 0.72, 0, 1],
-            }}
+            exit={
+              reduceMotion
+                ? { opacity: 0, transition: { duration: 0.3 } }
+                : {
+                    opacity: 0,
+                    scale: 0.96,
+                    y: 0,
+                    transition: { duration: 0.5, ease: [0.32, 0.72, 0, 1] },
+                  }
+            }
+            transition={
+              reduceMotion
+                ? { duration: 0.3 }
+                : { type: "spring", stiffness: 260, damping: 24, mass: 0.9 }
+            }
           >
             <MacLoadingDialog progress={progress} />
           </motion.div>

@@ -206,3 +206,25 @@ body {
     background: rgba(255, 255, 255, 0.92);
   }
 }
+
+/* ----- Preloader progress bar sheen ----- */
+/* A soft highlight that drifts across the filled portion of the loading
+   bar, giving it the gentle "alive" shimmer of a real macOS progress bar.
+   Suppressed under reduced-motion. */
+@keyframes loader-sheen {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+.loader-sheen {
+  animation: loader-sheen 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader-sheen {
+    animation: none;
+    opacity: 0;
+  }
+}

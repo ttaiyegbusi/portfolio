@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { MotionConfig, motion } from "framer-motion";
+import { MotionConfig } from "framer-motion";
 import { WindowManagerProvider } from "./context/WindowManager";
 import { BackgroundProvider } from "./context/BackgroundProvider";
 import { PreviewProvider } from "./context/PreviewContext";
+import { RevealContext } from "./context/RevealContext";
 import Desktop from "./components/Desktop";
 import Preloader from "./components/preloader/Preloader";
 
 export default function App() {
-  // Desktop renders underneath from the start (so its assets load behind the
-  // overlay), but stays visually hidden until the preloader has exited.
+  // Flipped true once the preloader has fully animated out. The desktop
+  // background is always mounted underneath; the windows/dock/topnav wait
+  // for this flag so their entrance animations play visibly on reveal.
   const [revealed, setRevealed] = useState(false);
 
   return (
@@ -16,14 +18,9 @@ export default function App() {
       <BackgroundProvider>
         <PreviewProvider>
           <WindowManagerProvider>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: revealed ? 1 : 0 }}
-              transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
-              aria-hidden={!revealed}
-            >
+            <RevealContext.Provider value={revealed}>
               <Desktop />
-            </motion.div>
+            </RevealContext.Provider>
           </WindowManagerProvider>
         </PreviewProvider>
       </BackgroundProvider>
