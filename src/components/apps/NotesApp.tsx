@@ -246,7 +246,7 @@ export default function NotesApp() {
                     key={note.id}
                     onClick={() => setActiveId(note.id)}
                     className={`mb-1 w-full rounded-md px-2.5 py-2 text-left transition-colors ${
-                      isActive ? "bg-[#FFE067]/45" : "hover:bg-black/[0.04]"
+                      isActive ? "bg-black/[0.06]" : "hover:bg-black/[0.03]"
                     }`}
                   >
                     <p className="truncate text-[12px] font-semibold text-inkStrong">{note.title}</p>
@@ -273,7 +273,7 @@ export default function NotesApp() {
                     key={article.id}
                     onClick={() => setActiveId(article.id)}
                     className={`mb-1 w-full rounded-md px-2.5 py-2 text-left transition-colors ${
-                      isActive ? "bg-[#FFE067]/45" : "hover:bg-black/[0.04]"
+                      isActive ? "bg-black/[0.06]" : "hover:bg-black/[0.03]"
                     }`}
                   >
                     <p className="truncate text-[12px] font-semibold text-inkStrong">{article.title}</p>
