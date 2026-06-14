@@ -1,6 +1,11 @@
 import type { ReactNode } from "react";
 import type { AppId } from "../types";
 import { APPS } from "./apps";
+import MobileFigma from "../components/mobile/apps/MobileFigma";
+import MobileNotes from "../components/mobile/apps/MobileNotes";
+import MobileDribbble from "../components/mobile/apps/MobileDribbble";
+import MobileProjects from "../components/mobile/apps/MobileProjects";
+import MobileFinder from "../components/mobile/apps/MobileFinder";
 
 /**
  * Mobile app registry. Reuses the same icons + names from the desktop APPS
@@ -25,34 +30,25 @@ export interface MobileAppDefinition {
   inDock: boolean;
 }
 
-function Placeholder({ name }: { name: string }) {
-  return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-2 px-8 text-center">
-      <p className="text-[17px] font-semibold text-inkStrong">{name}</p>
-      <p className="text-[14px] text-inkTertiary">Coming to mobile soon.</p>
-    </div>
-  );
-}
-
 const def = (
   id: AppId,
-  opts: { onHome?: boolean; inDock?: boolean; render?: () => ReactNode } = {},
+  opts: { onHome?: boolean; inDock?: boolean; render?: () => ReactNode; name?: string } = {},
 ): MobileAppDefinition => ({
   id,
-  name: APPS[id].name,
+  name: opts.name ?? APPS[id].name,
   icon: APPS[id].icon,
-  render: opts.render ?? (() => <Placeholder name={APPS[id].name} />),
+  render: opts.render ?? (() => null),
   onHome: opts.onHome ?? true,
   inDock: opts.inDock ?? false,
 });
 
 /** Home-screen grid order. */
 export const MOBILE_APPS: MobileAppDefinition[] = [
-  def("figma", { inDock: true }),
-  def("notes", { inDock: true }),
-  def("dribbble", { inDock: true }),
-  def("projects"),
-  def("finder", { inDock: true }),
+  def("figma", { inDock: true, name: "About", render: () => <MobileFigma /> }),
+  def("notes", { inDock: true, render: () => <MobileNotes /> }),
+  def("dribbble", { inDock: true, render: () => <MobileDribbble /> }),
+  def("projects", { render: () => <MobileProjects /> }),
+  def("finder", { inDock: true, render: () => <MobileFinder /> }),
 ];
 
 export const MOBILE_DOCK_APPS: MobileAppDefinition[] = MOBILE_APPS.filter((a) => a.inDock);
