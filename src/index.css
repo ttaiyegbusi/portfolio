@@ -228,3 +228,24 @@ body {
     opacity: 0;
   }
 }
+
+/* ----- Mobile touch polish ----- */
+/* Remove the gray tap-flash on iOS, stop long-press callouts on buttons/links,
+   and prevent Safari from auto-inflating text in landscape. Inputs keep
+   selection/callout so fields still behave normally. */
+@media (max-width: 767px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+  /* Contain overscroll so sheets don't rubber-band the whole page */
+  .mobile-scroll {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+}

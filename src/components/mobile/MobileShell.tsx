@@ -6,18 +6,34 @@ import { getMobileApp } from "../../data/mobileApps";
 import StatusBar from "./StatusBar";
 import HomeScreen from "./HomeScreen";
 import AppSheet from "./AppSheet";
+import MobileSettings from "./MobileSettings";
 
 /**
  * Root of the iOS-style mobile experience. Renders the themed wallpaper, the
- * home screen (status bar + app grid + dock), and—when an app is open—a
+ * home screen (status bar + app grid + dock), and—when a screen is open—a
  * full-screen sheet over the top. Shares the same Background/Preview/Window
  * contexts as the desktop, so wallpaper theming and app data stay unified.
  */
 export default function MobileShell() {
   const { background } = useBackground();
   const revealed = useRevealed();
-  const { openAppId, openApp, closeApp } = useMobileNav();
-  const activeApp = openAppId ? getMobileApp(openAppId) : undefined;
+  const { active, open, close } = useMobileNav();
+
+  const tone = background.isDark ? "light" : "dark";
+
+  // Resolve the active target into a title + content.
+  let sheetTitle = "";
+  let sheetContent = null;
+  if (active === "settings") {
+    sheetTitle = "Settings";
+    sheetContent = <MobileSettings />;
+  } else if (active) {
+    const app = getMobileApp(active);
+    if (app) {
+      sheetTitle = app.name;
+      sheetContent = app.render();
+    }
+  }
 
   return (
     <div className="fixed inset-0 overflow-hidden">
@@ -28,18 +44,18 @@ export default function MobileShell() {
           in visibly rather than behind the loader. */}
       {revealed && (
         <div className="absolute inset-0 flex flex-col">
-          <StatusBar tone="dark" />
+          <StatusBar tone={tone} />
           <div className="min-h-0 flex-1">
-            <HomeScreen onOpen={openApp} />
+            <HomeScreen onOpen={open} />
           </div>
         </div>
       )}
 
-      {/* Open app sheet */}
+      {/* Open screen sheet */}
       <AnimatePresence>
-        {activeApp && (
-          <AppSheet key={activeApp.id} title={activeApp.name} onClose={closeApp}>
-            {activeApp.render()}
+        {sheetContent && (
+          <AppSheet key={active} title={sheetTitle} onClose={close}>
+            {sheetContent}
           </AppSheet>
         )}
       </AnimatePresence>
