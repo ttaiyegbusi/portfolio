@@ -2,8 +2,11 @@ import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { File, Hash, PanelLeft, Plus, Search } from "lucide-react";
 
-const PAGES = ["About Me", "Knit", "icametoo", "Football booth", "Chain Core"];
+const PAGES = ["About Me", "Knit", "icametoo", "Football booth", "Chain Core", "Reeple", "Turbopay"];
 const PROJECTS = ["Keyboard", "Mobile App", "Mobile App"];
+
+/** Pages that open the project case-study modal when clicked. */
+export const MODAL_PAGES = new Set(["Knit", "icametoo", "Football booth", "Chain Core", "Reeple", "Turbopay"]);
 
 const ITEM_META: Record<string, { title: string; subtitle: string }> = {
   "About Me": { title: "About Me", subtitle: "Portfolio overview" },
@@ -11,6 +14,8 @@ const ITEM_META: Record<string, { title: string; subtitle: string }> = {
   icametoo: { title: "icametoo", subtitle: "Event discovery" },
   "Football booth": { title: "Football Booth", subtitle: "Social networking" },
   "Chain Core": { title: "Chain Core", subtitle: "Web3 dashboard" },
+  Reeple: { title: "Reeple", subtitle: "Remittances & payments" },
+  Turbopay: { title: "Turbopay", subtitle: "Payments app" },
   Keyboard: { title: "Keyboard", subtitle: "3D exploration" },
   "Mobile App": { title: "Mobile App", subtitle: "Concept design" },
 };
