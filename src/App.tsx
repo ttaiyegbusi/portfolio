@@ -3,6 +3,7 @@ import { MotionConfig } from "framer-motion";
 import { WindowManagerProvider } from "./context/WindowManager";
 import { BackgroundProvider } from "./context/BackgroundProvider";
 import { PreviewProvider } from "./context/PreviewContext";
+import { ProjectViewerProvider } from "./context/ProjectViewerContext";
 import { RevealContext } from "./context/RevealContext";
 import { useDeviceType } from "./hooks/useDeviceType";
 import Desktop from "./components/Desktop";
@@ -18,11 +19,13 @@ export default function App() {
     <MotionConfig reducedMotion="user">
       <BackgroundProvider>
         <PreviewProvider>
-          <WindowManagerProvider>
-            <RevealContext.Provider value={revealed}>
-              {device === "phone" ? <MobileShell /> : <Desktop />}
-            </RevealContext.Provider>
-          </WindowManagerProvider>
+          <ProjectViewerProvider>
+            <WindowManagerProvider>
+              <RevealContext.Provider value={revealed}>
+                {device === "phone" ? <MobileShell /> : <Desktop />}
+              </RevealContext.Provider>
+            </WindowManagerProvider>
+          </ProjectViewerProvider>
         </PreviewProvider>
       </BackgroundProvider>
 

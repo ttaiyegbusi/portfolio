@@ -1,13 +1,13 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { PanelLeftOpen, X } from "lucide-react";
 import type { AppContentProps } from "../../../types";
 import FigmaCanvas from "./FigmaCanvas";
 import CanvasContent, { FRAME_CENTERS } from "./CanvasContent";
-import LeftSidebar, { MODAL_PAGES } from "./LeftSidebar";
+import LeftSidebar, { CASE_STUDY_PAGES } from "./LeftSidebar";
 import RightSidebar from "./RightSidebar";
-import ProjectPageModal from "./ProjectPageModal";
-import { PROJECTS_BY_PAGE } from "../../../data/projects";
+import { useProjectViewer } from "../../../context/ProjectViewerContext";
+import { useWindowManager } from "../../../context/WindowManager";
 
 const TABS = ["Knit", "icametoo", "Football booth", "Chain Core", "Foot...", "Foot..."];
 
@@ -18,21 +18,19 @@ export default function FigmaApp({ controls, dragHandleProps }: AppContentProps)
   const [activePage, setActivePage] = useState("About Me");
   const [focusKey, setFocusKey] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalPage, setModalPage] = useState<string | null>(null);
-  const lastTriggerRef = useRef<HTMLElement | null>(null);
+  const { setActiveProject } = useProjectViewer();
+  const { handleDockClick } = useWindowManager();
 
   const selectPage = (page: string) => {
     setActivePage(page);
     setFocusKey((k) => k + 1);
-    if (MODAL_PAGES.has(page)) {
-      lastTriggerRef.current = document.activeElement as HTMLElement;
-      setModalPage(page);
-      setModalOpen(true);
+    if (CASE_STUDY_PAGES.has(page)) {
+      setActiveProject(page);
+      // handleDockClick covers open / restore-from-minimized / focus in one call,
+      // exactly like clicking the app's own dock icon would.
+      handleDockClick("projectPage");
     }
   };
-
-  const activeProject = modalPage ? PROJECTS_BY_PAGE[modalPage] ?? null : null;
 
   return (
     <div className={`flex h-full flex-col ${isDarkMode ? "bg-[#1a1a1a] text-white" : ""}`}>
@@ -136,14 +134,6 @@ export default function FigmaApp({ controls, dragHandleProps }: AppContentProps)
             </motion.button>
           )}
         </AnimatePresence>
-
-        {/* Project case-study modal */}
-        <ProjectPageModal
-          project={activeProject}
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          returnFocusRef={lastTriggerRef}
-        />
       </div>
     </div>
   );

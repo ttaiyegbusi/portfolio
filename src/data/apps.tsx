@@ -1,5 +1,6 @@
 import type { AppDefinition, AppId } from "../types";
 import FigmaApp from "../components/apps/figma/FigmaApp";
+import ProjectPageApp from "../components/apps/figma/ProjectPageApp";
 import NotesApp from "../components/apps/NotesApp";
 import DribbbleApp from "../components/apps/DribbbleApp";
 import ImagePreviewApp from "../components/apps/ImagePreviewApp";
@@ -7,6 +8,7 @@ import FinderApp from "../components/apps/FinderApp";
 import ProjectsApp from "../components/apps/ProjectsApp";
 import { DribbbleIcon, FigmaIcon, FinderIcon, NotesIcon, ProjectsIcon } from "../components/icons/AppIcons";
 import PreviewIcon from "../components/icons/PreviewIcon";
+import ProjectPageIcon from "../components/icons/ProjectPageIcon";
 
 /** vertical space reserved at the bottom of the screen for the dock */
 export const DOCK_CLEARANCE = 92;
@@ -77,6 +79,14 @@ export const APPS: Record<AppId, AppDefinition> = {
     render: () => <ImagePreviewApp />,
     icon: <PreviewIcon />,
   },
+  projectPage: {
+    id: "projectPage",
+    name: "Project",
+    minSize: { w: 560, h: 420 },
+    defaultBounds: (vw, vh) => clampBounds(vw * 0.5 - 470, vh * 0.5 - 360, 940, 720, vw, vh),
+    render: () => <ProjectPageApp />,
+    icon: <ProjectPageIcon />,
+  },
 };
 
 /** dock order (left to right) */
@@ -87,4 +97,5 @@ export const APP_LIST: AppDefinition[] = [
   APPS.notes,
   APPS.dribbble,
   APPS.imagePreview,
+  APPS.projectPage,
 ];

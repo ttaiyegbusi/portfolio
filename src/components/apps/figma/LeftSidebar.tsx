@@ -5,8 +5,8 @@ import { File, Hash, PanelLeft, Plus, Search } from "lucide-react";
 const PAGES = ["About Me", "Knit", "icametoo", "Football booth", "Chain Core", "Reeple", "Turbopay"];
 const PROJECTS = ["Keyboard", "Mobile App", "Mobile App"];
 
-/** Pages that open the project case-study modal when clicked. */
-export const MODAL_PAGES = new Set(["Knit", "icametoo", "Football booth", "Chain Core", "Reeple", "Turbopay"]);
+/** Pages that open the project case-study window when clicked. */
+export const CASE_STUDY_PAGES = new Set(["Knit", "icametoo", "Football booth", "Chain Core", "Reeple", "Turbopay"]);
 
 const ITEM_META: Record<string, { title: string; subtitle: string }> = {
   "About Me": { title: "About Me", subtitle: "Portfolio overview" },

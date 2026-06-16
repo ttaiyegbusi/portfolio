@@ -73,7 +73,11 @@ export default function Dock() {
         <span className="dock-sheen absolute inset-0 rounded-[21px]" />
 
         <AnimatePresence initial={false} mode="popLayout">
-          {APP_LIST.filter((app) => app.id !== "imagePreview" || windows.imagePreview.open).map((app) => (
+          {APP_LIST.filter(
+            (app) =>
+              (app.id !== "imagePreview" || windows.imagePreview.open) &&
+              (app.id !== "projectPage" || windows.projectPage.open),
+          ).map((app) => (
             <motion.div
               key={app.id}
               layout
